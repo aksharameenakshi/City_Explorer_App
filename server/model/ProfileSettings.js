@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const ProfileSettingsSchema = new mongoose.Schema({
     fname:String,
     lname:String,
@@ -8,5 +7,5 @@ const ProfileSettingsSchema = new mongoose.Schema({
 })
 
 const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSettingsSchema);
-
-module.exports = ProfileSettingsModel;
+export default ProfileSettingsModel
+// module.exports = ProfileSettingsModel;
