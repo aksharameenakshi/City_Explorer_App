@@ -1,14 +1,8 @@
-// const express = require("express"); //builds web servers
 import express from 'express'
 import cors from "cors"
 import dotenv from 'dotenv'
 import session from "express-session"
 import MongoStore from 'connect-mongo'
-// const cors = require("cors");  
-// const dotenv = require("dotenv");
-// const session = require("express-session"); 
-// const MongoStore = require("connect-mongo");
-// const UserModel = require("./model/User"); //mentioning datatype for table
 import { addGroup ,groupById,allGroup} from "./controllers/group.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 
@@ -19,11 +13,6 @@ app.use(cors({
     origin: 'http://localhost:3000', //frontend's URL
     credentials: true
 }));
-
-
-// mongoose.connect('mongodb://localhost:27017/college')
-//     .then(() => console.log('Connected to MongoDB'))
-//     .catch(err => console.error('Failed to connect to MongoDB', err));
 
 
 
@@ -41,7 +30,7 @@ app.listen(process.env.PORT, () => {
     console.log(`Server is running on port${process.env.PORT}`);
 });
 
-app.post('/postGroup',addGroup);
+app.post('/addGroup',addGroup);
 app.get('/groupById',groupById)
 app.get('/allGroup',allGroup)
 app.post("/profile_settings",profileSettings);

@@ -8,4 +8,3 @@ const ProfileSettingsSchema = new mongoose.Schema({
 
 const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSettingsSchema);
 export default ProfileSettingsModel
-// module.exports = ProfileSettingsModel;
