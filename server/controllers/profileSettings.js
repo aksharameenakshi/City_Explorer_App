@@ -39,7 +39,7 @@ export const getProfileSettings =async (req, res) => {
         res.status(404).json("No Records found");
       }
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error); 
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
