@@ -17,9 +17,9 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
 
     title: { type: String, trim: true },
     description: { type: String, trim: true },
-    //date: { type: Date }, 
+    date: { type: Date }, 
     //time: { type: String },
-    //location: { type: String }
+    location: { type: String }
 
   }));
 
