@@ -8,8 +8,8 @@ export const secretKey = 'DND4U';
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/app-backend', {})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Could not connect to MongoDB', err));
+ .then(() => console.log('Connected to MongoDB'))
+ .catch(err => console.error('Could not connect to MongoDB', err));
 
 route.use(express.json());
 

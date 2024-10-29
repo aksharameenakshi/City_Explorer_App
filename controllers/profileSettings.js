@@ -11,9 +11,9 @@ mongoose.connect('mongodb://localhost:27017/app-backend')
 
 export const profileSettings =  async (req, res) => {
     try {
-    const { fname,lname,email,phn_number } = req.body;
+    const { firstName,lastName,email,phn_number } = req.body;
       
-        const userProfile = new ProfileSettingsModel({ fname,lname,email,phn_number });
+        const userProfile = new ProfileSettingsModel({ firstName,lastName,email,phn_number });
         const savedProfile = await userProfile.save(); //data saved to db
         res.status(201).json(savedProfile);
     } catch (error) {

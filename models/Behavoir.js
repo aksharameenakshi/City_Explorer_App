@@ -28,16 +28,20 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
   }));
 
  const ProfileSettingsSchema = new mongoose.Schema({
-    fname:String,
-    lname:String,
-    email:String,
-    phn_number:Number,
+  firstName:String,
+  lastName:String,
+  email:String,
+  phn_number:Number,
 })
 export const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSettingsSchema);
+
 const GroupSchema = new mongoose.Schema({
-   
   gname:String,
-  username: String,
+  users:[{
+    firstName:String,
+    lastName:String,
+    email:String
+  }]
 
 })
 export const GroupModel = mongoose.model("groups", GroupSchema);

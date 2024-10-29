@@ -5,7 +5,7 @@ const route = express.Router();
 route.use(express.json());
 
 
-mongoose.connect('mongodb://localhost:27017/app-backend')
+mongoose.connect('mongodb://localhost:27017/app-backend',)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
@@ -41,8 +41,8 @@ export const groupById =async (req, res) => {
         id: group._id,
         gname: group.gname,
         users: group.users.map(user => ({  //"user" as array
-          fname: user.fname,               //showing only the required details of the users 
-          lname: user.lname,
+          firstName: user.firstName,               //showing only the required details of the users 
+          lastName: user.lastName,
           email: user.email
         }))
       };
