@@ -26,7 +26,7 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
     location: { type: String }
 
   }));
-
+// profile setting model
  const ProfileSettingsSchema = new mongoose.Schema({
   firstName:String,
   lastName:String,
@@ -34,7 +34,7 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
   phn_number:Number,
 })
 export const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSettingsSchema);
-
+// group model
 const GroupSchema = new mongoose.Schema({
   gname:String,
   users:[{
