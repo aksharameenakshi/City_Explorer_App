@@ -1,15 +1,32 @@
-import {User} from "../models/Behavoir.js";
+import jwt from 'jsonwebtoken';
+import { User } from '../models/Behavoir.js';
+import { secretKey } from '../controllers/login.js';
 
-export const authentication = async function(req, res , next){
-    try { 
-        if(!req.session.userName) {
-            global.loggedIn = false;  
-            global.userData = ""; 
-            req.session.destroy(()=> { });
-            return res.status(200).render('message', { data:{message:"User session was terminated. Please login." } } ) 
-        } 
-        next();
-    } catch (ex) {
-        console.log(ex);
+export const jwtAuthentication = (req, res, next) => {
+    const bearer = req.headers.authorization;
+
+    if(!bearer){
+        res.status(401);
+        res.json({message: "Not authorized"});
+        return;
     }
-}
+
+    const [, token] = bearer.split(' ');
+
+    if(!token){
+        res.status(401);
+        res.json({message: "Not a valid token"});
+        return;
+    }
+
+    try {
+        const user = jwt.verify(token, secretKey);
+        req.user = user;
+        next();
+    } catch (e) {
+        console.error(e);
+        res.status(401);
+        res.json({message: "Not valid token"});
+        return;
+    }
+}  
