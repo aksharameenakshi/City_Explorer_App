@@ -27,6 +27,8 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
 
   }));
 
+// profile setting model
+
  const ProfileSettingsSchema = new mongoose.Schema({
   firstName:String,
   lastName:String,
