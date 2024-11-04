@@ -103,4 +103,20 @@ export const GroupModel = mongoose.model("groups", GroupSchema);
   
     return { valid: true }; 
   }
+
+  const AboutUsSchema = new mongoose.Schema({
+    body:String,
+  })
+  export const AboutUsModel = mongoose.model("aboutus", AboutUsSchema);
+
+  const TermsAndConditionSchema = new mongoose.Schema({
+    body:String,
+  })
+  export const TermsAndConditionModel = mongoose.model("termsandcondition", TermsAndConditionSchema);
+  
+
+  const PrivacyPolicySchema = new mongoose.Schema({
+    body:String,
+  })
+  export const PrivacyPolicyModel = mongoose.model("privacypolicy", PrivacyPolicySchema);
   
