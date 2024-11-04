@@ -37,7 +37,7 @@ export const signupRoute = async (req, res) => {
     // Create a new user with validated input
     const newUser = new User({
       ...req.body,
-      password: hashedPassword, // Save the hashed password
+      password: hashedPassword, 
     });
 
     // Save the new user to the database
