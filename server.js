@@ -7,7 +7,7 @@ import cors from "cors"
 import { jwtAuthentication } from "./middleware/authware.js";
 import { addGroup ,groupById,allGroup} from "./controllers/community.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
-
+import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 
 const app = express();
 app.use(cors());
@@ -29,6 +29,9 @@ app.get('/groupById',groupById);
 app.get('/allGroup',jwtAuthentication,allGroup);
 app.post("/profile_settings", jwtAuthentication, profileSettings);
 app.get("/getprofilesettings",jwtAuthentication, getProfileSettings); 
+app.get("/getAboutUs",jwtAuthentication,getAboutUs); 
+app.get("/getTermsAndCondition",jwtAuthentication,getTermsAndCondition); 
+app.get("/getPrivacy",jwtAuthentication,getPrivacyPolicy);
 
 import dotenv from "dotenv";
 dotenv.config()

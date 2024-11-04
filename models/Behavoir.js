@@ -27,7 +27,6 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
 
   }));
 
-  // profile_setting Model
  const ProfileSettingsSchema = new mongoose.Schema({
   firstName:String,
   lastName:String,
@@ -105,4 +104,20 @@ export const GroupModel = mongoose.model("groups", GroupSchema);
   
     return { valid: true }; 
   }
+
+  const AboutUsSchema = new mongoose.Schema({
+    body:String,
+  })
+  export const AboutUsModel = mongoose.model("aboutus", AboutUsSchema);
+
+  const TermsAndConditionSchema = new mongoose.Schema({
+    body:String,
+  })
+  export const TermsAndConditionModel = mongoose.model("termsandcondition", TermsAndConditionSchema);
+  
+
+  const PrivacyPolicySchema = new mongoose.Schema({
+    body:String,
+  })
+  export const PrivacyPolicyModel = mongoose.model("privacypolicy", PrivacyPolicySchema);
   
