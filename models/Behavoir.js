@@ -1,27 +1,92 @@
 import mongoose from 'mongoose';
 import Joi from 'joi'
-const currentDate = new Date(); 
+//const currentDate = new Date(); 
 
-export const User = mongoose.model('User', new mongoose.Schema({
-
-    firstName: { type: String,  trim: true }, 
+const userSchema = new mongoose.Schema({
+    firstName: { type: String, trim: true }, 
     lastName: { type: String, trim: true },  
-    userName: { type: String,  trim: true },
-    password: { type: String,  trim: true }, 
+    username: { type: String, required: true, trim: true }, 
+    password: { type: String, trim: true }, 
     email: { type: String, trim: true },
-    phoneNumber: {type: String, trim: true },
-    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }]
-}));
+    phoneNumber: { type: String, trim: true },
+    resetPasswordToken: {type: String, trim: true },
+    resetPasswordExpires: { type: Date, trim: true },
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }], 
+    group: [{type: mongoose.Schema.Types.ObjectId, ref: 'groups'}],
+    reminders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
+    notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }]
 
+  });
+  
+
+
+export const User = mongoose.model('User', userSchema);
 export const Event = mongoose.model('Event', new mongoose.Schema({
 
     title: { type: String, trim: true },
     description: { type: String, trim: true },
-    //date: { type: Date }, 
-    //time: { type: String },
-    //location: { type: String }
+    date: { type: Date }, 
+    time: { type: String },
+    location: { type: String }
 
   }));
+
+ const ProfileSettingsSchema = new mongoose.Schema({
+    fname:String,
+    lname:String,
+    email:String,
+    phn_number:Number,
+})
+export const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSettingsSchema);
+const GroupSchema = new mongoose.Schema({
+   
+  gname:String,
+  users:[{
+    fname:String,
+    lname:String,
+    email:String,
+    phn_number:Number
+}]
+
+
+})
+export const GroupModel = mongoose.model("groups", GroupSchema);
+
+
+const notification = new mongoose.Schema({
+  username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  eventId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
+  message: String,
+  read: Boolean
+});
+
+export const Notification = mongoose.model('Notification', notification);
+
+const feedback = new mongoose.Schema({
+  username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  feedbackText: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 500
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+export const Feedback = mongoose.model('Feedback', feedback);
+
+const report = new mongoose.Schema({
+  username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  message: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  reply: { type: String }, 
+  repliedAt: { type: Date },
+});
+
+export const Report = mongoose.model('Report', report);
 
   // Signup validation schema
   export const signupSchema = Joi.object({
@@ -30,21 +95,21 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
     phoneNumber: Joi.string().pattern(/^[0-9]{10,15}$/).required(), 
     username: Joi.string().alphanum().min(4).max(30).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(), // Ensure password is at least 8 characters
+    password: Joi.string().min(8).required(), 
   });
   
   // Validation function for signup data
   export function validateSignUpData(data) {
-    const { error } = signupSchema.validate(data); // Validate the data against the schema
+    const { error } = signupSchema.validate(data); 
   
     if (error) {
       return {
         valid: false,
-        message: error.details[0].message // Return the validation error message
+        message: error.details[0].message 
       };
     }
   
-    return { valid: true }; // Return a valid result if no error
+    return { valid: true }; 
   }
   
   // Login validation schema
@@ -55,29 +120,29 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
   
   // Validation function for login credentials
   export function validateLoginCredentials(data) {
-    const { error } = loginSchema.validate(data); // Validate the data against the schema
+    const { error } = loginSchema.validate(data); 
   
     if (error) {
       return {
         valid: false,
-        message: error.details[0].message // Return the validation error message
+        message: error.details[0].message 
       };
     }
   
-    return { valid: true }; // Return a valid result if no error
+    return { valid: true }; 
   }
   
-  // General purpose validation function (if needed)
+ 
   export function validateData(data, schema) {
-    const { error } = schema.validate(data); // Validate the data against the schema
+    const { error } = schema.validate(data); 
   
     if (error) {
       return {
         valid: false,
-        message: error.details[0].message // Return the validation error message
+        message: error.details[0].message 
       };
     }
   
-    return { valid: true }; // Return a valid result if no error
+    return { valid: true }; 
   }
   
