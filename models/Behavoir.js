@@ -46,6 +46,42 @@ const GroupSchema = new mongoose.Schema({
 })
 export const GroupModel = mongoose.model("groups", GroupSchema);
 
+const notification = new mongoose.Schema({
+  username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  eventId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
+  message: String,
+  read: Boolean
+});
+
+export const Notification = mongoose.model('Notification', notification);
+
+const feedback = new mongoose.Schema({
+  username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  feedbackText: {
+    type: String,
+    required: true,
+    minlength: 1,
+    maxlength: 500
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+export const Feedback = mongoose.model('Feedback', feedback);
+
+const report = new mongoose.Schema({
+  username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  message: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  reply: { type: String }, 
+  repliedAt: { type: Date },
+});
+
+export const Report = mongoose.model('Report', report);
+
+
   // Signup validation schema
   export const signupSchema = Joi.object({
     firstName: Joi.string().min(2).required(),
