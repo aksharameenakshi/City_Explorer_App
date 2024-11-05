@@ -8,6 +8,13 @@ import { jwtAuthentication } from "./middleware/authware.js";
 import { addGroup ,groupById,allGroup} from "./controllers/community.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
+import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
+import { userSettings, updateSettings } from "./controllers/appearance.js";
+import { deleteAcc } from "./controllers/deleteAcc.js";
+import { reminderRoute, notificationRoute } from "./controllers/notification.js";
+import { feedbackRoute } from "./controllers/feedback.js";
+import { reportRoute, adminReplyRoute, sendEmailNotification} from "./controllers/Help center.js";
+
 
 const app = express();
 app.use(cors());
@@ -32,6 +39,18 @@ app.get("/getprofilesettings",jwtAuthentication, getProfileSettings);
 app.get("/getAboutUs",jwtAuthentication,getAboutUs); 
 app.get("/getTermsAndCondition",jwtAuthentication,getTermsAndCondition); 
 app.get("/getPrivacy",jwtAuthentication,getPrivacyPolicy);
+app.post('/forgot-password', forgotPassword);
+app.post('/reset-password/:token', resetPassword);
+app.get('/preferences', jwtAuthentication, userSettings);
+app.put('/preferences',jwtAuthentication, updateSettings);
+app.post('/logout',loginRoute);
+app.delete('/delete-account', jwtAuthentication, deleteAcc);
+app.post('/reminders', jwtAuthentication, reminderRoute);
+app.get('/notifications', jwtAuthentication, notificationRoute);
+app.post('/feedback', jwtAuthentication, feedbackRoute);
+app.post('/report', jwtAuthentication, reportRoute);
+app.post('/admin-reply', jwtAuthentication, adminReplyRoute);
+app.post('/reply-notification', jwtAuthentication, sendEmailNotification);
 
 import dotenv from "dotenv";
 dotenv.config()
