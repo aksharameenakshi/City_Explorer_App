@@ -43,7 +43,7 @@ app.post('/forgot-password', forgotPassword);
 app.post('/reset-password/:token', resetPassword);
 app.get('/preferences', jwtAuthentication, userSettings);
 app.put('/preferences',jwtAuthentication, updateSettings);
-app.post('/logout', logoutRoute);
+app.post('/logout',loginRoute);
 app.delete('/delete-account', jwtAuthentication, deleteAcc);
 app.post('/reminders', jwtAuthentication, reminderRoute);
 app.get('/notifications', jwtAuthentication, notificationRoute);
