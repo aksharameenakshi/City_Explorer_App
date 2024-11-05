@@ -39,3 +39,15 @@ export const loginRoute = async (req, res) => {
 
   res.json({ message: 'Login successful', token }); // Send token in response
 };
+
+export const logoutRoute = (req, res) => {
+  
+  const authHeader = req.headers.authorization;
+  const token = authHeader ? authHeader.split(' ')[1] : req.cookies.authorization;
+
+  res.clearCookie('authorization'); 
+
+  res.status(200).json({ message: 'Logged out successfully' });
+  //res.redirect('/login');
+
+}
