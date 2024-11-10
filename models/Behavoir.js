@@ -156,3 +156,10 @@ export const Report = mongoose.model('Report', report);
   })
   export const PrivacyPolicyModel = mongoose.model("privacypolicy", PrivacyPolicySchema);
   
+  const newMessage = new mongoose.Schema({
+    content: String,
+    group:String,  // Reference to Group
+    author: String,  // Reference to User (ObjectId)
+  });
+
+  export const Messages = mongoose.model('messages', newMessage);

@@ -5,7 +5,7 @@ import { signupRoute } from "./controllers/signup.js";
 import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
 import { jwtAuthentication } from "./middleware/authware.js";
-import { addGroup ,groupById,allGroup} from "./controllers/community.js";
+import { addGroup ,groupById,allGroup,addGroupUser} from "./controllers/community.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
@@ -14,6 +14,7 @@ import { deleteAcc } from "./controllers/deleteAcc.js";
 import { reminderRoute, notificationRoute } from "./controllers/notification.js";
 import { feedbackRoute } from "./controllers/feedback.js";
 import { reportRoute, adminReplyRoute, sendEmailNotification} from "./controllers/Help center.js";
+import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 
 
 const app = express();
@@ -34,6 +35,7 @@ app.delete('/my-events', jwtAuthentication, eventRouteDelete);
 app.post('/addGroup',jwtAuthentication, addGroup);
 app.get('/groupById',groupById);
 app.get('/allGroup',jwtAuthentication,allGroup);
+app.post("/add_guser",addGroupUser),
 app.post("/profile_settings", jwtAuthentication, profileSettings);
 app.get("/getprofilesettings",jwtAuthentication, getProfileSettings); 
 app.get("/getAboutUs",jwtAuthentication,getAboutUs); 
@@ -51,6 +53,11 @@ app.post('/feedback', jwtAuthentication, feedbackRoute);
 app.post('/report', jwtAuthentication, reportRoute);
 app.post('/admin-reply', jwtAuthentication, adminReplyRoute);
 app.post('/reply-notification', jwtAuthentication, sendEmailNotification);
+app.post('/addmessages', addMessges)
+app.delete('/deleteMessage',deleteMessage)
+app.put('/editMessage',editMessage)
+app.get('/getAllMessages',getAllMessages) 
+app.get('/getMessageById',getMessageById)
 
 import dotenv from "dotenv";
 dotenv.config()

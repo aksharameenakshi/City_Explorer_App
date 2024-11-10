@@ -65,3 +65,46 @@ export const allGroup = async (req, res) => {
       res.status(500).json({ message: 'Error fetching groups', error });
     });
   };
+
+  export const addGroupUser= async (req, res) => {
+    try {
+      const groupId = req.body.groupId;
+      const newUsers = req.body.users; // Assuming new users are provided in an array
+  
+      // Find the group by ID
+      const group = await GroupModel.findById(groupId);
+  
+      if (!group) {
+        return res.status(404).json({ error: "Group not found." });
+      }
+
+      // Check if adding new users would exceed the limit (more efficient)
+      const currentUsersCount = group.users.length;
+      const totalUsersAfterAdding = currentUsersCount + newUsers.length;
+      if (totalUsersAfterAdding > 5) {
+        return res.status(400).json({ error: 'Group already has the maximum of 5 users.' });
+      }
+  
+      // Validate and add new users to the group
+      const validNewUsers = [];
+      for (const newUser of newUsers) {
+      
+  
+        // Check if the email already exists in the group
+        const existingUser = group.users.find(user => user.email === newUser.email);
+        if (existingUser) {
+          continue; // Skip existing users
+        }
+  
+        validNewUsers.push(newUser);
+      }
+  
+      // Add valid new users to the group
+      group.users = group.users.concat(validNewUsers);
+      await group.save();
+      res.status(200).json({ message: group });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error." });
+    }
+  };
