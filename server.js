@@ -13,7 +13,7 @@ import { userSettings, updateSettings } from "./controllers/appearance.js";
 import { deleteAcc } from "./controllers/deleteAcc.js";
 import { reminderRoute, notificationRoute } from "./controllers/notification.js";
 import { feedbackRoute } from "./controllers/feedback.js";
-import { reportRoute, adminReplyRoute, sendEmailNotification} from "./controllers/Help center.js";
+import { reportRoute, adminReplyRoute } from "./controllers/Help center.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 
 
@@ -52,7 +52,6 @@ app.get('/notifications', jwtAuthentication, notificationRoute);
 app.post('/feedback', jwtAuthentication, feedbackRoute);
 app.post('/report', jwtAuthentication, reportRoute);
 app.post('/admin-reply', jwtAuthentication, adminReplyRoute);
-app.post('/reply-notification', jwtAuthentication, sendEmailNotification);
 app.post('/addmessages', addMessges)
 app.delete('/deleteMessage',deleteMessage)
 app.put('/editMessage',editMessage)
