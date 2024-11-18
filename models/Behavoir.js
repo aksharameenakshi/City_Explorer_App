@@ -11,9 +11,16 @@ const userSchema = new mongoose.Schema({
     email: { type: String, trim: true },
     phoneNumber: { type: String, trim: true },
     wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }], 
-    group: [{type: mongoose.Schema.Types.ObjectId, ref: 'groups'}]
+    group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups'}],
+    notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification'}],
+    settings: [{
+      theme: { type: String, default: 'light' },
+      fontSize: { type: String, default: 'medium' },
+      color: { type: String, default: '#000000' },
+      fontStyle: { type: String, default: 'Arial' },
+    }]
   });
-  
+
 
 
 export const User = mongoose.model('User', userSchema);
