@@ -1,10 +1,11 @@
 import express from "express"
+import mongoose from "mongoose";
 import path from "path"
 import { loginRoute } from "./controllers/login.js";
 import { signupRoute } from "./controllers/signup.js";
 import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
-import { jwtAuthentication } from "./middleware/authware.js";
+import { authentication } from "./middleware/authware.js";
 import { addGroup ,groupById,allGroup,addGroupUser} from "./controllers/community.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
@@ -13,7 +14,7 @@ import { userSettings, updateSettings } from "./controllers/appearance.js";
 import { deleteAcc } from "./controllers/deleteAcc.js";
 import { reminderRoute, notificationRoute } from "./controllers/notification.js";
 import { feedbackRoute } from "./controllers/feedback.js";
-import { reportRoute, adminReplyRoute } from "./controllers/Help center.js";
+import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 
 
@@ -29,29 +30,29 @@ app.post('/signup', signupRoute);
 app.get('/upcomingevents', eventRouteUp);
 app.get('/events/search', eventRouteSearch);
 app.post('/events/filter', eventRouteFilter);
-app.get('/my-events', jwtAuthentication, eventRouteMyevents);
-app.post('/my-events', jwtAuthentication, eventRouteAdd);
-app.delete('/my-events', jwtAuthentication, eventRouteDelete);
-app.post('/addGroup',jwtAuthentication, addGroup);
+app.get('/my-events', [authentication], eventRouteMyevents);
+app.post('/my-events', [authentication], eventRouteAdd);
+app.delete('/my-events', [authentication], eventRouteDelete);
+app.post('/addGroup',[authentication], addGroup);
 app.get('/groupById',groupById);
-app.get('/allGroup',jwtAuthentication,allGroup);
+app.get('/allGroup', [authentication],allGroup);
 app.post("/add_guser",addGroupUser),
-app.post("/profile_settings", jwtAuthentication, profileSettings);
-app.get("/getprofilesettings",jwtAuthentication, getProfileSettings); 
-app.get("/getAboutUs",jwtAuthentication,getAboutUs); 
-app.get("/getTermsAndCondition",jwtAuthentication,getTermsAndCondition); 
-app.get("/getPrivacy",jwtAuthentication,getPrivacyPolicy);
+app.post("/profile_settings", [authentication], profileSettings);
+app.get("/getprofilesettings",[authentication], getProfileSettings); 
+app.get("/getAboutUs",[authentication],getAboutUs); 
+app.get("/getTermsAndCondition",[authentication],getTermsAndCondition); 
+app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password/:token', resetPassword);
-app.get('/preferences', jwtAuthentication, userSettings);
-app.put('/preferences',jwtAuthentication, updateSettings);
+app.get('/preferences', [authentication], userSettings);
+app.put('/preferences',[authentication], updateSettings);
 app.post('/logout',loginRoute);
-app.delete('/delete-account', jwtAuthentication, deleteAcc);
-app.post('/reminders', jwtAuthentication, reminderRoute);
-app.get('/notifications', jwtAuthentication, notificationRoute);
-app.post('/feedback', jwtAuthentication, feedbackRoute);
-app.post('/report', jwtAuthentication, reportRoute);
-app.post('/admin-reply', jwtAuthentication, adminReplyRoute);
+app.delete('/delete-account', [authentication], deleteAcc);
+app.post('/reminders', [authentication], reminderRoute);
+app.get('/notifications', [authentication], notificationRoute);
+app.post('/feedback', [authentication], feedbackRoute);
+app.post('/report', [authentication], reportRoute);
+app.post('/admin-reply', [authentication], adminReplyRoute);
 app.post('/addmessages', addMessges)
 app.delete('/deleteMessage',deleteMessage)
 app.put('/editMessage',editMessage)
@@ -61,9 +62,10 @@ app.get('/getMessageById',getMessageById)
 import dotenv from "dotenv";
 dotenv.config()
 
-const PORT = process.env.PORT 
+mongoose.connect("mongodb://192.168.40.248/app-backend");
 
+global.PORT = process.env.PORT || 2024
 
-app.listen(PORT, () => {
-console.log(`Server is running on port ${PORT}`);
+app.listen(global.PORT, () => {
+console.log(`connection has been created on ${global.PORT}`);
 });
