@@ -43,7 +43,7 @@ app.get("/getAboutUs",[authentication],getAboutUs);
 app.get("/getTermsAndCondition",[authentication],getTermsAndCondition); 
 app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
-app.post('/reset-password/:token', resetPassword);
+app.post('/reset-password', resetPassword);
 app.get('/preferences', [authentication], userSettings);
 app.put('/preferences',[authentication], updateSettings);
 app.post('/logout',loginRoute);
