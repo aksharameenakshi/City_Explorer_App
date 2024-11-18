@@ -1,16 +1,8 @@
 import express from "express";
-import mongoose from "mongoose";
 const route = express.Router();
 import { Event, User } from "../models/Behavoir.js"; 
 
-
 route.use = (express);
-
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/app-backend', {strictPopulate: false})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Could not connect to MongoDB', err));
-
 
 // Get upcoming events
 export const eventRouteUp = async (req, res) => {
