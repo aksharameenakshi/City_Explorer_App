@@ -1,15 +1,9 @@
 import express from "express";
-import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { loginSchema, User} from "../models/Behavoir.js"; 
 const route = express.Router();
 import jwt from 'jsonwebtoken';
 export const secretKey = 'DND4U';
-
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/app-backend', {})
- .then(() => console.log('Connected to MongoDB'))
- .catch(err => console.error('Could not connect to MongoDB', err));
 
 route.use(express.json());
 
@@ -29,7 +23,7 @@ export const loginRoute = async (req, res) => {
   }
 
   // Compare the input password with the hashed password in the database
-  const isValidPassword = await bcrypt.compare(password, user.password); // Use await here
+  const isValidPassword = await bcrypt.compare(password, user.password); 
   if (!isValidPassword) {
     return res.status(401).send('Invalid username or password');
   }
@@ -37,7 +31,7 @@ export const loginRoute = async (req, res) => {
   
   const token = jwt.sign({ username:req.body.userName }, secretKey, { expiresIn: '1h' });
 
-  res.json({ message: 'Login successful', token }); // Send token in response
+  res.json({ message: 'Login successful', token }); 
 };
 
 export const logoutRoute = (req, res) => {
