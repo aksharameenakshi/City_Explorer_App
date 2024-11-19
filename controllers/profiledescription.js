@@ -1,5 +1,4 @@
 import express from "express";
-<<<<<<< HEAD
 import { AboutUsModel , TermsAndConditionModel ,PrivacyPolicyModel} from "../models/Behavoir.js";
 const route = express.Router();
 route.use(express.json());
@@ -46,10 +45,8 @@ route.use(express.json());
             res.status(500).json({ error: 'Internal Server Error' });
         }
     };
-=======
 import { ProfileSettingsModel } from "../models/Behavoir.js";
-const route = express.Router();
-route.use(express.json());
+
 
 export const profileSettings =  async (req, res) => {
     try {
@@ -85,4 +82,3 @@ export const getProfileSettings =async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
->>>>>>> 84f3b670ee530f847d3053e9f595dfa1f073ae74

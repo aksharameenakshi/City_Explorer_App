@@ -4,22 +4,6 @@ const route = express.Router();
 route.use(express.json());
 
 
-export const addGroup = async (req, res) => {
-    try {
-    const { gname,users } = req.body;
-      
-        const newGroup = new GroupModel({ gname,users });
-        const savedGroup = await newGroup.save();
-        const groupDetails = {
-            id: savedGroup._id,
-            gname: savedGroup.gname,
-          };
-          res.status(201).json(groupDetails);
-        } catch (error) {
-          console.error(error);
-          res.status(500).json({ error: "Internal server error." }); 
-        }
-};
 
 export const groupById =async (req, res) => {
     try {
@@ -49,6 +33,8 @@ export const groupById =async (req, res) => {
     }
   };
 
+
+  //get all group data
 export const allGroup = async (req, res) => {
 
     GroupModel.find()
@@ -61,45 +47,63 @@ export const allGroup = async (req, res) => {
     });
   };
 
+  //to add user to a existing group [group id , user id]
   export const addGroupUser= async (req, res) => {
     try {
       const groupId = req.body.groupId;
-      const newUsers = req.body.users; // Assuming new users are provided in an array
+      const newUsers=[{userId:req.body.users}]
   
-      // Find the group by ID
       const group = await GroupModel.findById(groupId);
   
       if (!group) {
         return res.status(404).json({ error: "Group not found." });
       }
 
-      // Check if adding new users would exceed the limit (more efficient)
+      // Check if adding new users would exceed the limit
       const currentUsersCount = group.users.length;
       const totalUsersAfterAdding = currentUsersCount + newUsers.length;
       if (totalUsersAfterAdding > 5) {
         return res.status(400).json({ error: 'Group already has the maximum of 5 users.' });
       }
   
-      // Validate and add new users to the group
-      const validNewUsers = [];
-      for (const newUser of newUsers) {
-      
-  
-        // Check if the email already exists in the group
-        const existingUser = group.users.find(user => user.email === newUser.email);
-        if (existingUser) {
-          continue; // Skip existing users
-        }
-  
-        validNewUsers.push(newUser);
-      }
-  
       // Add valid new users to the group
-      group.users = group.users.concat(validNewUsers);
+      group.users = group.users.concat(newUsers);
       await group.save();
       res.status(200).json({ message: group });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ error: "Internal server error." });
     }
   };
+
+  //to create a group[group name , description,and 1 userid]
+  export const group= async(req,res)=>{
+
+    try{
+    const  gname  = req.body.gname;
+    const description=req.body.description
+    const users=[{userId:req.body.users}]
+
+    const group = await GroupModel.findOne({ gname: gname });
+
+    if(!group){
+      const newGroup = new GroupModel({ gname,description,users });
+      const savedGroup = await newGroup.save();
+          if (!savedGroup) {
+            console.error('Error saving group. Please check the database connection and retry.');
+            return res.status(500).json({ message: 'Error saving group' });
+          }
+          const groupDetails = {
+            id: savedGroup._id, 
+            gname:savedGroup.gname ,
+            description:savedGroup.description
+          };
+          res.status(200).json(groupDetails);
+    }
+    else{
+         return res.status(400).json({ error: 'Group already exists.' });
+    }
+    }
+    catch(error){
+      res.status(500).json({ error: "Internal server error." });
+    }
+  }

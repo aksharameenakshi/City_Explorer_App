@@ -44,11 +44,8 @@ export const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSe
 // group model
 const GroupSchema = new mongoose.Schema({
   gname:String,
-  users:[{
-    firstName:String,
-    lastName:String,
-    email:String
-  }]
+  description:String,
+  users:[{userName:String}]
 
 })
 export const GroupModel = mongoose.model("groups", GroupSchema);
