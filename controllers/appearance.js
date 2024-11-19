@@ -54,50 +54,8 @@ export const updateSettings = async (req, res) => {
         if (fontSize) updates["settings.fontSize"] = fontSize;
         if (color) updates["settings.color"] = color;
         if (fontStyle) updates["settings.fontStyle"] = fontStyle;
-<<<<<<< HEAD
-
-       
-        if (Object.keys(updates).length === 0) {
-            return res.status(400).json({ message: 'No settings provided for update' });
-        }
-
-        
-        const { username } = req.body;
-
-        
-        if (!username) {
-            return res.status(400).json({ message: 'Username is required' });
-        }
-
-        
-        const updatedUser = await User.findOneAndUpdate(
-            { username: username },  
-            { $set: updates },      
-            { new: true }            
-        );
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        
-        res.json({
-            message: 'Settings updated successfully',
-            settings: updatedUser.settings,  
-        });
-    } catch (error) {
-        console.error('Error updating settings:', error);
-        res.status(500).json({ message: 'Error updating settings', error: error.message });
-    }
-};
 
 
-        
-
-=======
->>>>>>> 84f3b670ee530f847d3053e9f595dfa1f073ae74
-
-       
         if (Object.keys(updates).length === 0) {
             return res.status(400).json({ message: 'No settings provided for update' });
         }
