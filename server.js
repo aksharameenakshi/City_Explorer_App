@@ -62,7 +62,7 @@ app.get('/getMessageById',getMessageById)
 import dotenv from "dotenv";
 dotenv.config()
 
-mongoose.connect("mongodb://192.168.40.248/app-backend");
+mongoose.connect("mongodb://localhost/app-backend");
 
 global.PORT = process.env.PORT || 2024
 
