@@ -1,12 +1,7 @@
 import express from "express";
-import mongoose from "mongoose";
 import { AboutUsModel , TermsAndConditionModel ,PrivacyPolicyModel} from "../models/Behavoir.js";
 const route = express.Router();
 route.use(express.json());
-
-mongoose.connect('mongodb://localhost:27017/app-backend')
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Failed to connect to MongoDB', err));
 
     export const getAboutUs = async (req, res) => {
         try {

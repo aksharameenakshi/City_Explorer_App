@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/Behavoir.js';
 import { secretKey } from '../controllers/login.js';
 
-export const jwtAuthentication = (req, res, next) => {
+export const authentication = (req, res, next) => {
     const bearer = req.headers.authorization;
 
     if(!bearer){

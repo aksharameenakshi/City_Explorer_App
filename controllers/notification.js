@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import { Server } from 'socket.io';
 import http from 'http'; 
 import { Notification } from "../models/Behavoir.js";
@@ -9,11 +8,6 @@ const server = http.createServer(app);
 const io = new Server(server); 
 
 app.use(express.json());
-
-
-mongoose.connect('mongodb://localhost:27017/app-backend', {})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Could not connect to MongoDB', err));
 
 
   export const reminderRoute = async (req, res) => {
