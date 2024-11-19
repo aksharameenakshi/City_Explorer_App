@@ -35,7 +35,6 @@ app.post('/my-events', [authentication], eventRouteAdd);
 app.delete('/my-events', [authentication], eventRouteDelete);
 app.get('/groupById',groupById);
 app.get('/allGroup', [authentication],allGroup);
-app.post("/add_guser",addGroupUser),
 app.post("/profile_settings", [authentication], profileSettings);
 app.get("/getprofilesettings",[authentication], getProfileSettings); 
 app.get("/getAboutUs",[authentication],getAboutUs); 
@@ -57,7 +56,9 @@ app.delete('/deleteMessage',deleteMessage)
 app.put('/editMessage',editMessage)
 app.get('/getAllMessages',getAllMessages) 
 app.get('/getMessageById',getMessageById)
-app.get('/group',group)
+app.post('/group',group),
+app.post("/add_guser",addGroupUser)
+
 import dotenv from "dotenv";
 dotenv.config()
 
