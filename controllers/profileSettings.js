@@ -4,6 +4,7 @@ const route = express.Router();
 route.use(express.json());
 
 
+
 export const profileSettings =  async (req, res) => {
     try {
     const { firstName,lastName,email,phn_number } = req.body;

@@ -6,7 +6,7 @@ import { signupRoute } from "./controllers/signup.js";
 import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
 import { authentication } from "./middleware/authware.js";
-import { addGroup ,groupById,allGroup,addGroupUser} from "./controllers/community.js";
+import { groupById,allGroup,addGroupUser,group} from "./controllers/community.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
@@ -33,10 +33,8 @@ app.post('/events/filter', eventRouteFilter);
 app.get('/my-events', [authentication], eventRouteMyevents);
 app.post('/my-events', [authentication], eventRouteAdd);
 app.delete('/my-events', [authentication], eventRouteDelete);
-app.post('/addGroup',[authentication], addGroup);
 app.get('/groupById',groupById);
 app.get('/allGroup', [authentication],allGroup);
-app.post("/add_guser",addGroupUser),
 app.post("/profile_settings", [authentication], profileSettings);
 app.get("/getprofilesettings",[authentication], getProfileSettings); 
 app.get("/getAboutUs",[authentication],getAboutUs); 
@@ -58,6 +56,8 @@ app.delete('/deleteMessage',deleteMessage)
 app.put('/editMessage',editMessage)
 app.get('/getAllMessages',getAllMessages) 
 app.get('/getMessageById',getMessageById)
+app.post('/group',group),
+app.post("/add_guser",addGroupUser)
 
 import dotenv from "dotenv";
 dotenv.config()
