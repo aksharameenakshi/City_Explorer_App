@@ -22,10 +22,11 @@ export const forgotPassword = async (req, res) => {
     }
 
     // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
     user.resetPasswordOTP = otp;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
+    console.log('Updated user with OTP:', user);
 
     
     const transporter = nodemailer.createTransport({
@@ -73,16 +74,17 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: 'OTP and Password are required.' });
     }
 
+    // Query the user
     const user = await User.findOne({
       resetPasswordOTP: otp,
-      resetPasswordExpires: { $gt: Date.now() }, // Ensure OTP has not expired
+      resetPasswordExpires: { $gt: Date.now() },
     });
 
     if (!user) {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
-    // Hash and set new password
+    // Hash and set the new password
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
     user.resetPasswordOTP = undefined;
@@ -90,9 +92,9 @@ export const resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({ message: 'Password has been reset successfully. Please login to continue' });
-
   } catch (error) {
     console.error('Error resetting password:', error);
     res.status(500).json({ message: 'Error resetting password.' });
   }
 };
+

@@ -4,23 +4,19 @@ import Joi from 'joi'
 
 
 const userSchema = new mongoose.Schema({
-    firstName: { type: String, trim: true }, 
-    lastName: { type: String, trim: true },  
-    username: { type: String, required: true, trim: true }, 
-    password: { type: String, trim: true }, 
-    email: { type: String, trim: true },
-    phoneNumber: { type: String, trim: true },
-    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }], 
-    group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups'}],
-    notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification'}],
-    settings: [{
-      theme: { type: String, default: 'light' },
-      fontSize: { type: String, default: 'medium' },
-      color: { type: String, default: '#000000' },
-      fontStyle: { type: String, default: 'Arial' },
-    }]
-  });
-
+  firstName: { type: String, trim: true },
+  lastName: { type: String, trim: true },
+  username: { type: String, required: true, trim: true },
+  password: { type: String, trim: true },
+  email: { type: String, trim: true },
+  phoneNumber: { type: String, trim: true },
+  resetPasswordOTP: { type: String },
+  resetPasswordExpires: { type: Date }, 
+  wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
+  group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
+  notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
+  settings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'settings' }]
+});
 
 
 export const User = mongoose.model('User', userSchema);
@@ -58,6 +54,15 @@ const notification = new mongoose.Schema({
 });
 
 export const Notification = mongoose.model('Notification', notification);
+
+const settingsSchema = new mongoose.Schema({
+  theme: { type: String, default: 'light' },
+  fontSize: { type: String, default: 'medium' },
+  color: { type: String, default: '#000000' },
+  fontStyle: { type: String, default: 'Arial' },
+});
+
+export const settings = mongoose.model('settings', settingsSchema)
 
 const feedback = new mongoose.Schema({
   username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
