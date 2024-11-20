@@ -94,7 +94,7 @@ export const allGroup = async (req, res) => {
           }
           const groupDetails = {
             id: savedGroup._id, 
-            gname:savedGroup.gname ,
+            groupname:savedGroup.groupname ,
             description:savedGroup.description
           };
           res.status(200).json(groupDetails);
