@@ -15,7 +15,12 @@ const userSchema = new mongoose.Schema({
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
   group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
   notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
-  settings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'settings' }]
+  settings: {
+  theme: { type: String, default: 'light' },
+  fontSize: { type: String, default: 'medium' },
+  color: { type: String, default: '#000000' },
+  fontStyle: { type: String, default: 'Arial' },
+}
 });
 
 
@@ -55,14 +60,6 @@ const notification = new mongoose.Schema({
 
 export const Notification = mongoose.model('Notification', notification);
 
-const settingsSchema = new mongoose.Schema({
-  theme: { type: String, default: 'light' },
-  fontSize: { type: String, default: 'medium' },
-  color: { type: String, default: '#000000' },
-  fontStyle: { type: String, default: 'Arial' },
-});
-
-export const settings = mongoose.model('settings', settingsSchema)
 
 const feedback = new mongoose.Schema({
   username: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

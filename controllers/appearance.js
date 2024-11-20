@@ -45,47 +45,41 @@ export const userSettings = async (req, res) => {
 
 export const updateSettings = async (req, res) => {
     try {
-        
-        const { theme, fontSize, color, fontStyle } = req.body;
+      const { theme, fontSize, color, fontStyle } = req.body;
+  
 
-        
-        const updates = {};
-        if (theme) updates["settings.theme"] = theme;
-        if (fontSize) updates["settings.fontSize"] = fontSize;
-        if (color) updates["settings.color"] = color;
-        if (fontStyle) updates["settings.fontStyle"] = fontStyle;
-
-
-        if (Object.keys(updates).length === 0) {
-            return res.status(400).json({ message: 'No settings provided for update' });
-        }
-
-        
-        const { username } = req.body;
-
-        
-        if (!username) {
-            return res.status(400).json({ message: 'Username is required' });
-        }
-
-        
-        const updatedUser = await User.findOneAndUpdate(
-            { username: username },  
-            { $set: updates },      
-            { new: true }            
-        );
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        
-        res.json({
-            message: 'Settings updated successfully',
-            settings: updatedUser.settings,  
-        });
+      const updates = {};
+      if (theme) updates["settings.theme"] = theme;
+      if (fontSize) updates["settings.fontSize"] = fontSize;
+      if (color) updates["settings.color"] = color;
+      if (fontStyle) updates["settings.fontStyle"] = fontStyle;
+  
+      if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ message: 'No settings provided for update' });
+      }
+  
+      const {username}  = req.body;
+      if (!username) {
+        return res.status(400).json({ message: 'Username is required' });
+      }
+  
+      const updatedUser = await User.findOneAndUpdate(
+         {username} , // Match user by username
+        { $set: updates }, // Use $set to update nested fields
+        { new: true } // Return updated document
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.json({
+        message: 'Settings updated successfully',
+        settings: updatedUser.settings, // Return updated settings
+      });
     } catch (error) {
-        console.error('Error updating settings:', error);
-        res.status(500).json({ message: 'Error updating settings', error: error.message });
+      console.error('Error updating settings:', error);
+      res.status(500).json({ message: 'Error updating settings', error: error.message });
     }
-};
+  };
+  
