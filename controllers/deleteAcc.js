@@ -6,16 +6,16 @@ route.use(express.json());
 
 export const deleteAcc = async (req, res) => {
     try {
-        const username = req.body; 
+        const {username} = req.body; 
 
         
-        const user = await User.findOne({username: req.body.userName});
+        const user = await User.findOne({username});
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         
-        await User.findOneAndDelete({username: req.body.userName});
+        await User.findOneAndDelete({username});
 
         
         res.clearCookie('token'); 
