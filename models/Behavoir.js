@@ -44,7 +44,7 @@ export const Event = mongoose.model('Event', new mongoose.Schema({
 export const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSettingsSchema);
 // group model
 const GroupSchema = new mongoose.Schema({
-  gname:String,
+  groupName:String,
   description:String,
   users:[{userId:String}]
 
