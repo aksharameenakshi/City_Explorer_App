@@ -6,7 +6,7 @@ route.use(express.json());
 
 
 export const profileSettings = async (req, res) => {
-    const { username } = req.body;
+    const { username } = req.query;
     const { firstName, lastName, email, phoneNumber } = req.body;
   
     try {
@@ -57,10 +57,10 @@ export const profileSettings = async (req, res) => {
 // }
 
 export const getProfileSettings = async (req, res) => {
-  const { username } = req.query; // Use query parameter
+  const { username } = req.query; 
 
   try {
-    // Fetch the user from the database
+    
     const user = await User.findOne({ username }).select(
       "firstName lastName email phoneNumber"
     );

@@ -6,7 +6,7 @@ route.use(express.json());
 
 export const deleteAcc = async (req, res) => {
     try {
-        const {username} = req.body; 
+        const {username} = req.query; 
 
         
         const user = await User.findOne({username});
