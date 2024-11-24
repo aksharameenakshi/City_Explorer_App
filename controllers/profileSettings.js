@@ -57,11 +57,11 @@ export const profileSettings = async (req, res) => {
 // }
 
 export const getProfileSettings = async (req, res) => {
-  const { username } = req.body;
+  const { username } = req.query; // Use query parameter
 
   try {
     // Fetch the user from the database
-    const user = await User.findOne({username}).select(
+    const user = await User.findOne({ username }).select(
       "firstName lastName email phoneNumber"
     );
 
@@ -79,7 +79,9 @@ export const getProfileSettings = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
-  }};
+  }
+};
+
 
 
 // export const getProfileSettings =async (req, res) => {
