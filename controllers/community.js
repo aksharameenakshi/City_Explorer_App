@@ -99,10 +99,9 @@ export const deleteGroup= async(req,res)=>{
   try {
     const  groupId  = req.body.groupId;
    const group = await GroupModel.findByIdAndDelete(groupId);
-
+   res.status(200).json(group);
    
 
-    res.json({ message: 'Group deleted successfully' });
   } catch (error) {
     console.error(error); 
     res.status(500).json({ error: 'Server Error' })}
