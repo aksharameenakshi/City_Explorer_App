@@ -6,7 +6,7 @@ import { signupRoute } from "./controllers/signup.js";
 import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
 import { authentication } from "./middleware/authware.js";
-import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup} from "./controllers/community.js";
+import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInGroup} from "./controllers/community.js";
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
@@ -59,6 +59,7 @@ app.post('/group',group),
 app.post("/add_guser",addGroupUser)
 app.delete('/removeUserGroup', removeUserFromGroup);
 app.delete('/deleteGroup', deleteGroup);
+app.get('/userListInGroup',userListInGroup) 
 
 
 import dotenv from "dotenv";

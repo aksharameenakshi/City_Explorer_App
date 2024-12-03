@@ -7,34 +7,32 @@ route.use(express.json());
 
 
 
-// export const groupById =async (req, res) => {
+export const userListInGroup =async (req, res) => {
 
-//     try {
-//       const groupId = req.body.groupId;
+    try {
+      const groupId = req.body.groupId;
   
-//       // Finding a single group by ID, including the users array
-//       const group = await GroupModel.findById(groupId).populate("users");
+      // Finding a single group by ID, including the users array
+      const group = await GroupModel.findById(groupId).populate("users");
   
-//       if (!group) {
-//         return res.status(404).json({ error: "Group not found." });
-//       }
+      if (!group) {
+        return res.status(404).json({ error: "Group not found." });
+      }
   
-//       const groupDetails = {        //"groupDetails" as object  
-//         id: group._id,
-//         groupName: group.groupName,
-//         users: group.users.map(user => ({  //"user" as array
-//           firstName: user.firstName,               //showing only the required details of the users 
-//           lastName: user.lastName,
-//           email: user.email
-//         }))
-//       };
+      const groupDetails = {        //"groupDetails" as object  
+        id: group._id,
+        groupName: group.groupName,
+        users: group.users.map(user => ({  //"user" as array
+          userName: user.userId,               //showing only the required details of the users 
+        }))
+      };
   
-//       res.status(200).json(groupDetails);
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: "Internal server error." });
-//     }
-//   };
+      res.status(200).json(groupDetails);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal server error." });
+    }
+  };
 
 
   //get all group data
