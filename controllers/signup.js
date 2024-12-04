@@ -27,7 +27,15 @@ export const signupRoute = async (req, res) => {
 
     // Hash the password
     const saltRounds = 10;
+
+    // Check for spaces in the password
+    if (/\s/.test(password)) {
+      throw new Error('Password should not contain spaces.');
+    }
+    
+    // Hash the password if valid
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    
 
     // Create a new user with validated input
     const newUser = new User({
