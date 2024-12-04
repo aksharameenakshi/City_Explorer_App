@@ -84,16 +84,18 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
-    // Hash and set the new password
+    if (/\s/.test(password)) {
+      throw new Error("Password must not contain spaces.");
+    }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
     user.resetPasswordOTP = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
-
+    
     res.status(200).json({ message: 'Password has been reset successfully. Please login to continue' });
   } catch (error) {
-    console.error('Error resetting password:', error);
     res.status(500).json({ message: 'Error resetting password.' });
   }
 };
