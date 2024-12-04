@@ -95,7 +95,8 @@ export const Report = mongoose.model('Report', report);
     phoneNumber: Joi.string().pattern(/^[0-9]{10,15}$/).required(), 
     username: Joi.string().alphanum().min(4).max(30).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().min(8).required(), 
+    password: Joi.string().min(8).pattern(/^\S+$/).required(),
+ 
   });
   
   // Validation function for signup data
