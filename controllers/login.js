@@ -8,6 +8,7 @@ export const secretKey = 'DND4U';
 route.use(express.json());
 
 export const loginRoute = async (req, res) => {
+  console.log("testing");
   // Validate incoming data using the validation schema
   const { error } = loginSchema.validate(req.body);
   if (error) {
