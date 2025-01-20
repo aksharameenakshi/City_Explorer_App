@@ -17,7 +17,7 @@ import { feedbackRoute } from "./controllers/feedback.js";
 import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 import {conStatus, viewEvent, viewUsers} from "./controllers/adminview.js"
-
+import { addEvents,allEvents ,eventCategory,deleteEvent,editEvent} from "./controllers/events.js";
 
 const app = express();
 app.use(cors());
@@ -64,6 +64,11 @@ app.get('/userListInGroup',userListInGroup);
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/events/:id', [authentication], conStatus);
 app.get('/users', [authentication], viewUsers)
+app.post("/addEvents",addEvents)
+app.get('/allEvents',allEvents)
+app.delete('/events/delete',deleteEvent)
+app.put('/events/editEvent/:id',editEvent)
+app.get('/events/category',eventCategory)
 
 
 

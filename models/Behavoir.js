@@ -33,6 +33,7 @@ const eventSchema = new mongoose.Schema({
     date: { type: Date }, 
     time: { type: String },
     location: { type: String },
+    category: { type: String },
     organizer: {type: String},
     status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
 
