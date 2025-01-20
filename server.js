@@ -2,7 +2,7 @@ import express from "express"
 import mongoose from "mongoose";
 import path from "path"
 import { loginRoute } from "./controllers/login.js";
-import { signupRoute } from "./controllers/signup.js";
+import { eventOrgSignUp, signupRoute } from "./controllers/signup.js";
 import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
 import { authentication } from "./middleware/authware.js";
@@ -16,6 +16,7 @@ import { reminderRoute, notificationRoute } from "./controllers/notification.js"
 import { feedbackRoute } from "./controllers/feedback.js";
 import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
+import {conStatus, viewEvent, viewUsers} from "./controllers/adminview.js"
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(express.json());
 
 app.post('/login', loginRoute);
 app.post('/signup', signupRoute);
+app.post('/organizer-signup', eventOrgSignUp);
 app.get('/upcomingevents', eventRouteUp);
 app.get('/events/search', eventRouteSearch);
 app.post('/events/filter', eventRouteFilter);
@@ -43,7 +45,6 @@ app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
 app.get('/preferences', [authentication], userSettings);
 app.put('/preferences',[authentication], updateSettings);
-app.post('/logout',loginRoute);
 app.delete('/delete-account', [authentication], deleteAcc);
 app.post('/reminders', [authentication], reminderRoute);
 app.get('/notifications', [authentication], notificationRoute);
@@ -59,13 +60,17 @@ app.post('/group',group),
 app.post("/add_guser",addGroupUser)
 app.delete('/removeUserGroup', removeUserFromGroup);
 app.delete('/deleteGroup', deleteGroup);
-app.get('/userListInGroup',userListInGroup) 
+app.get('/userListInGroup',userListInGroup);
+app.get('/admin/events', [authentication], viewEvent);
+app.patch('/admin/events/:id', [authentication], conStatus);
+app.get('/users', [authentication], viewUsers)
+
 
 
 import dotenv from "dotenv";
 dotenv.config()
 
-mongoose.connect("mongodb://localhost/app-backend");
+mongoose.connect('mongodb://localhost/app-backend');
 
 global.PORT = process.env.PORT || 2024
 

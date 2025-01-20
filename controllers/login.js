@@ -8,6 +8,7 @@ export const secretKey = 'DND4U';
 route.use(express.json());
 
 export const loginRoute = async (req, res) => {
+  console.log("testing");
   // Validate incoming data using the validation schema
   const { error } = loginSchema.validate(req.body);
   if (error) {
@@ -34,14 +35,3 @@ export const loginRoute = async (req, res) => {
   res.json({ message: 'Login successful', token }); 
 };
 
-export const logoutRoute = (req, res) => {
-  
-  const authHeader = req.headers.authorization;
-  const token = authHeader ? authHeader.split(' ')[1] : req.cookies.authorization;
-
-  res.clearCookie('authorization'); 
-
-  res.status(200).json({ message: 'Logged out successfully' });
-  //res.redirect('/login');
-
-}

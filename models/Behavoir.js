@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Joi from 'joi'
-//const currentDate = new Date(); 
+
 
 
 const userSchema = new mongoose.Schema({
@@ -15,25 +15,32 @@ const userSchema = new mongoose.Schema({
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
   group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
   notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
+  role: { type: String, enum: ['USER', 'EVENT_ORGANIZER', 'ADMIN'], default: 'USER' },
+  organizationName: { type: String, trim: true },
+  createdAt: { type: Date, default: Date.now },
   settings: {
   theme: { type: String, default: 'light' },
   fontSize: { type: String, default: 'medium' },
   color: { type: String, default: '#000000' },
   fontStyle: { type: String, default: 'Arial' },
+ 
 }
 });
 
-
-export const User = mongoose.model('User', userSchema);
-export const Event = mongoose.model('Event', new mongoose.Schema({
-
+const eventSchema = new mongoose.Schema({
     title: { type: String, trim: true },
     description: { type: String, trim: true },
     date: { type: Date }, 
     time: { type: String },
-    location: { type: String }
+    location: { type: String },
+    organizer: {type: String},
+    status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
 
-  }));
+  });
+
+  export const User = mongoose.model('User', userSchema);
+  export const Event = mongoose.model('Event',eventSchema);
+
 // profile setting model
  const ProfileSettingsSchema = new mongoose.Schema({
   firstName:String,
@@ -96,9 +103,21 @@ export const Report = mongoose.model('Report', report);
     username: Joi.string().alphanum().min(4).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).pattern(/^\S+$/).required(),
+    role: Joi.string().valid('user', 'event_organizer', 'admin').required()
  
   });
   
+
+export const organizerSignupSchema = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  username: Joi.string().alphanum().min(3).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  role: Joi.string().valid('event_organizer').required(),
+  organizationName: Joi.string().required(),
+});
+
   // Validation function for signup data
   export function validateSignUpData(data) {
     const { error } = signupSchema.validate(data); 
