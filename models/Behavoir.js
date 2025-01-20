@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema({
   group: [{ type: mongoose.Schema.Types.ObjectId, ref: 'groups' }],
   notification: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
   role: { type: String, enum: ['USER', 'EVENT_ORGANIZER', 'ADMIN'], default: 'USER' },
-  organizationName: { type: String, trim: true },
   createdAt: { type: Date, default: Date.now },
   settings: {
   theme: { type: String, default: 'light' },
