@@ -2,7 +2,7 @@ import express from "express"
 import mongoose from "mongoose";
 import path from "path"
 import { loginRoute } from "./controllers/login.js";
-import { eventOrgSignUp, signupRoute } from "./controllers/signup.js";
+import { signupRoute } from "./controllers/signup.js";
 import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
 import { authentication } from "./middleware/authware.js";
@@ -17,7 +17,7 @@ import { feedbackRoute } from "./controllers/feedback.js";
 import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 import {conStatus, viewEvent, viewUsers} from "./controllers/adminview.js"
-import { addEvents,allEvents ,eventCategory,deleteEvent,editEvent} from "./controllers/events.js";
+import { addEvents, allEvents, deleteEvent, editEvent, eventCategory } from "./controllers/event.js";
 
 const app = express();
 app.use(cors());
@@ -28,7 +28,6 @@ app.use(express.json());
 
 app.post('/login', loginRoute);
 app.post('/signup', signupRoute);
-app.post('/organizer-signup', eventOrgSignUp);
 app.get('/upcomingevents', eventRouteUp);
 app.get('/events/search', eventRouteSearch);
 app.post('/events/filter', eventRouteFilter);
@@ -63,11 +62,11 @@ app.delete('/deleteGroup', deleteGroup);
 app.get('/userListInGroup',userListInGroup);
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/events/:id', [authentication], conStatus);
-app.get('/users', [authentication], viewUsers)
-app.post("/addEvents",addEvents)
-app.get('/allEvents',allEvents)
-app.delete('/events/delete',deleteEvent)
-app.put('/events/editEvent/:id',editEvent)
+app.get('/users', [authentication], viewUsers);
+app.post('/addEvents', addEvents);
+app.get('/allEvents',allEvents);
+app.delete('/events/delete',deleteEvent);
+app.put('/events/editEvent/:id',editEvent);
 app.get('/events/category',eventCategory)
 
 

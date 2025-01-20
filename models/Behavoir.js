@@ -104,20 +104,10 @@ export const Report = mongoose.model('Report', report);
     username: Joi.string().alphanum().min(4).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).pattern(/^\S+$/).required(),
-    role: Joi.string().valid('user', 'event_organizer', 'admin').required()
+    role: Joi.string().valid('USER', 'EVENT_ORGANIZER', 'ADMIN').required()
  
   });
   
-
-export const organizerSignupSchema = Joi.object({
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  username: Joi.string().alphanum().min(3).required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-  role: Joi.string().valid('event_organizer').required(),
-  organizationName: Joi.string().required(),
-});
 
   // Validation function for signup data
   export function validateSignUpData(data) {

@@ -1,13 +1,12 @@
 import express from "express";
 import { Event } from "../models/Behavoir.js";
 
-
 const route = express.Router();
 route.use(express.json());
 
 // Create a new event
 
-export const addEvents=   async (req, res) => {
+export const addEvents =   async (req, res) => {
     try {
       const newEvent = new Event(req.body);
       newEvent.status = "pending"
@@ -20,7 +19,7 @@ export const addEvents=   async (req, res) => {
 
 // Get all events
 
-    export const allEvents=  async (req, res) => {
+    export const allEvents =  async (req, res) => {
     try {
       const events = await Event.find();
       res.json(events);
@@ -30,7 +29,7 @@ export const addEvents=   async (req, res) => {
   };
 
     // Delete event by ID
-    export const deleteEvent= async (req, res) => {
+    export const deleteEvent = async (req, res) => {
     const { eventId } = req.body;
     try {
       const result = await Event.findByIdAndDelete(eventId);
@@ -44,7 +43,7 @@ export const addEvents=   async (req, res) => {
   };
 
   // Update an event by ID
-  export const editEvent =async (req, res) => {
+  export const editEvent = async (req, res) => {
     const { id } = req.params;
     const updatedEventData = req.body; 
   
