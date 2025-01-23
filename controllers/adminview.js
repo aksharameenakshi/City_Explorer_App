@@ -12,29 +12,35 @@ export const viewEvent = async (req, res) => {
       res.status(500).json({ message: 'Error fetching events', error: err.message });
     }};
   
-export const conStatus = async (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-  
-    if (!['accepted', 'rejected'].includes(status)) {
-      return res.status(400).json({ message: 'Invalid status. Use "accepted" or "rejected".' });
-    }
-  
-    try {
-      const event = await Event.findByIdAndUpdate(
-        id,
-        { status },
-        { new: true } 
-      );
-  
-      if (!event) {
-        return res.status(404).json({ message: 'Event not found' });
+    export const conStatus = async (req, res) => {
+      const { ids, status } = req.body; 
+    
+      if (!['accepted', 'rejected'].includes(status)) {
+        return res.status(400).json({ message: 'Invalid status. Use "accepted" or "rejected".' });
       }
-  
-      res.status(200).json({ message: `Event ${status} successfully`, event });
-    } catch (err) {
-      res.status(500).json({ message: 'Error updating event', error: err.message });
-    }};
+    
+      if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).json({ message: 'Invalid or empty list of event IDs.' });
+      }
+    
+      try {
+        const result = await Event.updateMany(
+          { _id: { $in: ids } }, // Match events whose IDs are in the provided list
+          { status } // Update the status for the matched events
+        );
+    
+        if (result.matchedCount === 0) {
+          return res.status(404).json({ message: 'No events found with the provided IDs.' });
+        }
+    
+        res.status(200).json({
+          message: `Events updated successfully. ${result.modifiedCount} event(s) marked as ${status}.`,
+        });
+      } catch (err) {
+        res.status(500).json({ message: 'Error updating events', error: err.message });
+      }
+    };
+    
   
     export const viewUsers = async (req, res) => {
       const { role } = req.query;
