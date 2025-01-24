@@ -18,6 +18,7 @@ import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 import {conStatus, viewEvent, viewUsers} from "./controllers/adminview.js"
 import { addEvents, allEvents, deleteEvent, editEvent, eventCategory } from "./controllers/event.js";
+import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
 app.use(cors());
@@ -60,6 +61,7 @@ app.post("/add_guser",addGroupUser)
 app.delete('/removeUserGroup', removeUserFromGroup);
 app.delete('/deleteGroup', deleteGroup);
 app.get('/userListInGroup',userListInGroup);
+app.post('/admin/create', initializeApp)
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/events/:id', [authentication], conStatus);
 app.get('/users', [authentication], viewUsers);
