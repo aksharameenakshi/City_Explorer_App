@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import { signupSchema,  User } from "../models/Behavoir.js";
+import { signupSchema, User } from "../models/Behavoir.js";
 
 const route = express.Router();
 

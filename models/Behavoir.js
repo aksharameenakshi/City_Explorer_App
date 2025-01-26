@@ -38,8 +38,17 @@ const eventSchema = new mongoose.Schema({
 
   });
 
+  const AdminSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: { type: String, default: 'admin' }, // Add roles if applicable
+  });
+
+
   export const User = mongoose.model('User', userSchema);
   export const Event = mongoose.model('Event',eventSchema);
+  export const Admin = mongoose.model('Admin', AdminSchema);
 
 // profile setting model
  const ProfileSettingsSchema = new mongoose.Schema({
