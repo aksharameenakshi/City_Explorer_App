@@ -76,7 +76,7 @@ export const addEvents =   async (req, res) => {
 
   export const eventCategory = async (req, res) => {
   try {
-    const category = req.body.category;
+    const {category} = req.query; 
     const events = await Event.find({ category: category });
 
     if (events.length === 0) {
