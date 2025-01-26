@@ -15,10 +15,10 @@ export const viewEvent = async (req, res) => {
     export const conStatus = async (req, res) => {
       const { ids, status } = req.body; 
     
-      if (!['accepted', 'rejected'].includes(status)) {
-        return res.status(400).json({ message: 'Invalid status. Use "accepted" or "rejected".' });
+      if (status !== 'accepted') {
+        return res.status(400).json({ message: 'Invalid status. Only "accepted" is allowed.' });
       }
-    
+      
       if (!Array.isArray(ids) || ids.length === 0) {
         return res.status(400).json({ message: 'Invalid or empty list of event IDs.' });
       }
