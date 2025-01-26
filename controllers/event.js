@@ -76,7 +76,7 @@ export const addEvents =   async (req, res) => {
 
   export const eventCategory = async (req, res) => {
   try {
-    const category = req.body.category;
+    const {category} = req.query; 
     const events = await Event.find({ category: category });
 
     if (events.length === 0) {
@@ -90,5 +90,38 @@ export const addEvents =   async (req, res) => {
   }
 };
 
+ // Get events by status for users
+ export const eventStatus= async (req, res) => {
+  let { role } = req.query;
+  let events
+  try {
+    if(role!= 'user'){
+
+      events = await Event.find();
+      res.json(events);
+    }
+    else{
+      events = await Event.find({ status: "accepted" });
+      res.json(events);
+       
+    }
+    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
+ // Get events by organizer
+
+export const eventOrganizer= async (req, res) => {
+  const { organizer } = req.query;
+  try {
+  
+     const events = await Event.find({ organizer: organizer });
+      res.json(events);
+       
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

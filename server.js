@@ -17,7 +17,7 @@ import { feedbackRoute } from "./controllers/feedback.js";
 import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 import {conStatus, viewEvent, viewUsers} from "./controllers/adminview.js"
-import { addEvents, allEvents, deleteEvent, editEvent, eventCategory } from "./controllers/event.js";
+import { addEvents, allEvents, deleteEvent, editEvent, eventCategory, eventStatus,eventOrganizer} from "./controllers/event.js";
 import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
@@ -65,12 +65,13 @@ app.post('/admin/create', initializeApp)
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/events/accept', [authentication], conStatus);
 app.get('/users', [authentication], viewUsers);
-app.post('/addEvents', addEvents);
-app.get('/allEvents',allEvents);
-app.delete('/events/delete',deleteEvent);
-app.put('/events/editEvent/:id',editEvent);
-app.get('/events/category',eventCategory)
-
+app.post('/addEvents', [authentication], addEvents);
+app.get('/allEvents', [authentication], allEvents);
+app.delete('/events/delete',[authentication], deleteEvent);
+app.put('/events/editEvent/:id', [authentication], editEvent);
+app.get('/events/category', [authentication], eventCategory)
+app.get('/events/status', [authentication], eventStatus)
+app.get('/events/organizer', [authentication], eventOrganizer)
 
 
 import dotenv from "dotenv";
