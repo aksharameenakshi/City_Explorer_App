@@ -40,7 +40,7 @@ export const loginRoute = async (req, res) => {
       response.message = 'Event organizer logged in successfully.';
     } else if (user.role === 'USER') {
       response.message = 'User logged in successfully.';
-    } else if (user.role === 'admin') {
+    } else if (user.role === 'ADMIN') {
       response.message = 'Admin logged in successfully.';
     } else {
       return res.status(403).json({ message: 'Unauthorized role.' });

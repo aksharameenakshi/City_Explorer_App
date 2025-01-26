@@ -63,7 +63,7 @@ app.delete('/deleteGroup', deleteGroup);
 app.get('/userListInGroup',userListInGroup);
 app.post('/admin/create', initializeApp)
 app.get('/admin/events', [authentication], viewEvent);
-app.patch('/admin/events/:id', [authentication], conStatus);
+app.patch('/admin/events/accept', [authentication], conStatus);
 app.get('/users', [authentication], viewUsers);
 app.post('/addEvents', addEvents);
 app.get('/allEvents',allEvents);
