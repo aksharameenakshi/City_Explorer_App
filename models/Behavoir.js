@@ -27,16 +27,16 @@ const userSchema = new mongoose.Schema({
 });
 
 const eventSchema = new mongoose.Schema({
-    title: { type: String, trim: true },
-    description: { type: String, trim: true },
-    date: { type: Date }, 
-    time: { type: String },
-    location: { type: String },
-    category: { type: String },
-    organizer: {type: String},
-    status: { type: String, enum: ['isApproved'], default: 'pending' },
+  title: { type: String, trim: true },
+  description: { type: String, trim: true },
+  date: { type: Date }, 
+  time: { type: String },
+  location: { type: String },
+  category: { type: String },
+  organizer: {type: String},
+  isApproved: { type: Boolean, default: false, index: true }
 
-  });
+});
 
   const AdminSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
