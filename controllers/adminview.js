@@ -15,11 +15,9 @@ export const viewEvent = async (req, res) => {
     export const conStatus = async (req, res) => {
       const { ids, isApproved } = req.body;
     
-      if (isApproved !== 'accepted') {
-        return res.status(400).json({ message: 'Invalid status. Only "accepted" is allowed.' });
+      if (typeof isApproved !== 'boolean') {
+        return res.status(400).json({ message: 'Invalid status. isApproved must be true or false.' });
       }
-    
-      const approvedStatus = isApproved === 'accepted';
     
       if (!Array.isArray(ids) || ids.length === 0) {
         return res.status(400).json({ message: 'Invalid or empty list of event IDs.' });
@@ -28,15 +26,17 @@ export const viewEvent = async (req, res) => {
       try {
         const result = await Event.updateMany(
           { _id: { $in: ids } }, // Match events whose IDs are in the list
-          { isApproved: approvedStatus } // Update the isApproved field
+          { isApproved } // Update the isApproved field with true or false
         );
     
         if (result.matchedCount === 0) {
           return res.status(404).json({ message: 'No events found with the provided IDs.' });
         }
     
+        const statusMessage = isApproved ? 'approved' : 'unapproved';
+    
         res.status(200).json({
-          message: `Events updated successfully. ${result.modifiedCount} event(s) marked as "accepted".`,
+          message: `Events updated successfully. ${result.modifiedCount} event(s) marked as "${statusMessage}".`,
         });
       } catch (err) {
         res.status(500).json({ message: 'Error updating events', error: err.message });
