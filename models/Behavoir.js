@@ -26,14 +26,14 @@ const userSchema = new mongoose.Schema({
 }
 });
 
-const eventSchema = new mongoose.Schema({
-  title: { type: String, trim: true },
-  description: { type: String, trim: true },
-  date: { type: Date }, 
-  time: { type: String },
-  location: { type: String },
-  category: { type: String },
-  organizer: {type: String},
+export const eventSchema = new mongoose.Schema({
+  title: { type: String, trim: true , required: [true, 'Title is required']},
+  description: { type: String, trim: true , required: [true, 'Description is required']},
+  date: { type: Date, required: [true, 'Date is required'] }, 
+  time: { type: String , required: [true, 'Time is required']},
+  location: { type: String, required: [true, 'Location is required'] },
+  category: { type: String , required: [true, 'Category is required']},
+  organizer: {type: String,  required: [true, 'Organizer is required'] },
   isApproved: { type: Boolean, default: false, index: true }
 
 });

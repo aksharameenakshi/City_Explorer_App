@@ -9,7 +9,6 @@ route.use(express.json());
 export const addEvents =   async (req, res) => {
     try {
       const newEvent = new Event(req.body);
-      newEvent.status = "pending"
       await newEvent.save();
       res.status(201).json(newEvent);
     } catch (error) {
@@ -62,7 +61,6 @@ export const addEvents =   async (req, res) => {
       event.location = updatedEventData.location || event.location; 
       event.category=updatedEventData.category||event.category;
       event.organizer=updatedEventData.organizer||event.organizer;
-      event.status = updatedEventData.status || event.status; 
   
       await event.save();
   
@@ -101,7 +99,7 @@ export const addEvents =   async (req, res) => {
       res.json(events);
     }
     else{
-      events = await Event.find({ status: "accepted" });
+      events = await Event.find({ isApproved: true });
       res.json(events);
        
     }
