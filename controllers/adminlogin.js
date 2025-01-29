@@ -7,15 +7,15 @@ const app = express();
 app.use(express.json());
 
 export const initializeApp = async () => {
-    const existingAdmin = await Admin.findOne({ role: 'admin' });
+    const existingAdmin = await Admin.findOne({ role: 'admin' })
   
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash('Admin123', 10);
+      const hashedPassword = await bcrypt.hash('admin123', 10);
       const admin = new Admin({
         username: 'admin',
         email: 'admin@example.com',
         password: hashedPassword,
-        role: 'admin',
+        role: 'ADMIN',
       });
   
       await admin.save();

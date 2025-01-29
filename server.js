@@ -61,7 +61,7 @@ app.post("/add_guser",addGroupUser)
 app.delete('/removeUserGroup', removeUserFromGroup);
 app.delete('/deleteGroup', deleteGroup);
 app.get('/userListInGroup',userListInGroup);
-app.post('/admin/create', initializeApp)
+// app.post('/admin/create, initializeApp)'
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/approve/events', [authentication], conStatus);
 app.get('/users', [authentication], viewUsers);
@@ -78,6 +78,8 @@ import dotenv from "dotenv";
 dotenv.config()
 
 mongoose.connect('mongodb://localhost/app-backend');
+
+//  await initializeApp();
 
 global.PORT = process.env.PORT || 2024
 
