@@ -12,45 +12,87 @@ export const viewEvent = async (req, res) => {
       res.status(500).json({ message: 'Error fetching events', error: err.message });
     }};
   
+
     export const conStatus = async (req, res) => {
-      const { updates } = req.body; 
-    
+      const { updates } = req.body;
+  
       // Validate the updates array
       if (!Array.isArray(updates) || updates.length === 0) {
-        return res.status(400).json({ message: 'Invalid or empty updates array.' });
+          return res.status(400).json({ message: 'Invalid or empty updates array.' });
       }
-    
+  
       // Validate each update object
       for (const update of updates) {
-        if (!update.id || typeof update.isApproved !== 'boolean') {
-          return res.status(400).json({
-            message: 'Each update must include a valid "id" and "isApproved" value (true or false).',
-          });
-        }
+          if (!update._id || typeof update.isApproved !== 'boolean') {
+              return res.status(400).json({
+                  message: 'Each update must include a valid "id" and "isApproved" value (true or false).',
+              });
+          }
       }
-    
+  
       try {
-        // Perform updates for each event individually
-        const bulkOperations = updates.map((update) => ({
-          updateOne: {
-            filter: { _id: update.id },
-            update: { isApproved: update.isApproved },
-          },
-        }));
-    
-        const result = await Event.bulkWrite(bulkOperations);
-    
-        if (result.matchedCount === 0) {
-          return res.status(404).json({ message: 'No events found with the provided IDs.' });
-        }
-    
-        res.status(200).json({
-          message: `Events updated successfully. ${result.modifiedCount} event(s) were updated.`,
-        });
+          // Perform updates for each event individually
+          const bulkOperations = updates.map((update) => ({
+              updateOne: {
+                  filter: { _id: update._id },
+                  update: { isApproved: update.isApproved },
+              },
+          }));
+  
+          const result = await Event.bulkWrite(bulkOperations);
+  
+          if (result.matchedCount === 0) {
+              return res.status(404).json({ message: 'No events found with the provided IDs.' });
+          }
+  
+          res.status(200).json({
+              message: `Events updated successfully. ${result.modifiedCount} event(s) were updated.`,
+          });
       } catch (err) {
-        res.status(500).json({ message: 'Error updating events', error: err.message });
+          res.status(500).json({ message: 'Error updating events', error: err.message });
       }
-    };
+  };
+  
+  
+    // export const conStatus = async (req, res) => {
+    //   const { updates } = req.body; 
+    
+    //   // Validate the updates array
+    //   if (!Array.isArray(updates) || updates.length === 0) {
+    //     return res.status(400).json({ message: 'Invalid or empty updates array.' });
+    //   }
+    
+    //   // Validate each update object
+    //   for (const update of updates) {
+    //     if (!update.id || typeof update.isApproved !== 'boolean') {
+    //       return res.status(400).json({
+    //         message: 'Each update must include a valid "id" and "isApproved" value (true or false).',
+    //       });
+    //     }
+    //   }
+    
+    //   try {
+    //     // Perform updates for each event individually
+    //     const bulkOperations = updates.map((update) => ({
+    //       updateOne: {
+    //         filter: { _id: update.id },
+    //         update: { isApproved: update.isApproved },
+    //       },
+    //     }));
+    
+    //     const result = await Event.bulkWrite(bulkOperations);
+    
+    //     if (result.matchedCount === 0) {
+    //       return res.status(404).json({ message: 'No events found with the provided IDs.' });
+    //     }
+    
+    //     res.status(200).json({
+    //       message: `Events updated successfully. ${result.modifiedCount} event(s) were updated.`,
+    //     });
+    //   } catch (err) {
+    //     res.status(500).json({ message: 'Error updating events', error: err.message });
+    //   }
+    // };
     
     
   
