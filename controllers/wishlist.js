@@ -7,15 +7,15 @@ route.use = (express);
 // Get upcoming events
 export const eventRouteUp = async (req, res) => {
   try {
-    const events = await Event.find( { } );
+    // Fetch only approved events
+    const events = await Event.find({ isApproved: true });
     console.log(events);
     res.status(200).json(events); // Send 200 status for success
-
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching events');
   }
-}
+};
 
 
 export const eventRouteSearch = async (req, res) => {
@@ -25,8 +25,9 @@ export const eventRouteSearch = async (req, res) => {
       return res.status(400).send('Invalid search query');
     }
 
-    // Perform a search based on title or description dynamically
+    // Perform a search based on title or description dynamically, only fetching approved events
     const events = await Event.find({
+      isApproved: true,
       $or: [
         { title: { $regex: query, $options: 'i' } },  
         { description: { $regex: query, $options: 'i' } }  
@@ -45,15 +46,14 @@ export const eventRouteSearch = async (req, res) => {
 }
 
 
+
 // Filter events
 export const eventRouteFilter = async (req, res) => {
   try {
     const { date, title, location } = req.body;
 
-    
-    const filter = {};
+    const filter = { isApproved: true }; // Ensure only approved events are shown
 
-    
     if (date) {
       const startOfDay = new Date(date);
       const endOfDay = new Date(startOfDay);
@@ -65,17 +65,14 @@ export const eventRouteFilter = async (req, res) => {
       };
     }
 
-    
     if (title) {
-      filter.title = { $regex: title, $options: 'i' }; 
+      filter.title = { $regex: title, $options: 'i' };
     }
 
-    
     if (location) {
-      filter.location = { $regex: location, $options: 'i' }; 
+      filter.location = { $regex: location, $options: 'i' };
     }
 
-    
     const events = await Event.find(filter);
 
     return res.status(200).json(events);
@@ -85,15 +82,14 @@ export const eventRouteFilter = async (req, res) => {
   }
 };
 
-
 // Get my events (wishlist)
 export const eventRouteMyevents = async (req, res) => {
   try {
     const username = req.user.username;
   
-    
     const user = await User.findOne({ username }).populate({
       path: 'wishlist',
+      match: { isApproved: true }, 
       select: 'title description' 
     });
   
@@ -101,13 +97,12 @@ export const eventRouteMyevents = async (req, res) => {
       return res.status(404).send("User not found.");
     }
   
-    
     res.json(user.wishlist);
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching wishlist');
   }
-}
+};
 
 // Add event to wishlist
 export const eventRouteAdd = async (req, res) => {
@@ -115,71 +110,65 @@ export const eventRouteAdd = async (req, res) => {
     const username = req.user.username;
     const { eventId } = req.body;
 
-    
-    const event = await Event.findById(eventId);
+    // Find the event and ensure it is approved
+    const event = await Event.findOne({ _id: eventId, isApproved: true });
     if (!event) {
-      return res.status(404).send("Event not found.");
+      return res.status(404).send("Approved event not found.");
     }
 
-    
     await User.updateOne(
       { username },
       { $addToSet: { wishlist: eventId } } 
     );
 
-    
     const user = await User.findOne({ username }).populate({
       path: 'wishlist',
+      match: { isApproved: true },
       select: 'title description date location' 
     });
- 
 
     if (!user) {
       return res.status(404).send("User not found.");
     }
 
-    
     res.json({
       message: "Event successfully added to wishlist.",
       wishlist: user.wishlist
     });
- 
-} catch (error) {
-  console.error(error);
-  res.status(500).send("Error adding event to wishlist or retrieving wishlist.");
-}
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error adding event to wishlist or retrieving wishlist.");
+  }
+};
 
-  };
     
 // Remove event from wishlist
 export const eventRouteDelete = async (req, res) => {
+  try {
+      const username = req.user.username;
+      const { eventId } = req.body;
 
-    try {
-      const username = req.user.username; 
-      const { eventId } = req.body; // 
-  
       if (!eventId) {
-        return res.status(400).send("Event ID is required to remove.");
+          return res.status(400).send("Event ID is required to remove.");
       }
-  
-      
-      const event = await Event.findById(eventId);
+
+      const event = await Event.findOne({ _id: eventId, isApproved: true });
       if (!event) {
-        return res.status(404).send("Event not found.");
+          return res.status(404).send("Approved event not found.");
       }
-  
+
       await User.updateOne(
-        { username },
-        {
-          $pull: {
-            wishlist: eventId 
+          { username },
+          {
+              $pull: {
+                  wishlist: eventId
+              }
           }
-        }
       );
-  
-      res.send("Event removed from wishlist.");
-    } catch (error) {
+
+      res.send("Approved event removed from wishlist.");
+  } catch (error) {
       console.error(error);
-      res.status(500).send("Error removing event from wishlist.");
-    }
+      res.status(500).send("Error removing approved event from wishlist.");
   }
+};

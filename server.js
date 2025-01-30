@@ -16,9 +16,9 @@ import { reminderRoute, notificationRoute } from "./controllers/notification.js"
 import { feedbackRoute } from "./controllers/feedback.js";
 import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
-import {conStatus, viewEvent, viewUsers} from "./controllers/adminview.js"
+import {conStatus, viewEvent } from "./controllers/adminview.js"
 import { addEvents, allEvents, deleteEvent, editEvent, eventCategory, eventStatus,eventOrganizer} from "./controllers/event.js";
-import { initializeApp } from "./controllers/adminlogin.js";
+// import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
 app.use(cors());
@@ -64,7 +64,7 @@ app.get('/userListInGroup',userListInGroup);
 // app.post('/admin/create, initializeApp)'
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/approve/events', [authentication], conStatus);
-app.get('/users', [authentication], viewUsers);
+// app.get('/users', [authentication], viewUsers);
 app.post('/addEvents', [authentication], addEvents);
 app.get('/allEvents', [authentication], allEvents);
 app.delete('/events/delete',[authentication], deleteEvent);
