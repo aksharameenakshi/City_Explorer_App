@@ -53,10 +53,13 @@ export const addEvents =   async (req, res) => {
         return res.status(404).json({ message: 'Event not found' });
       }
   
+      if(event.isApproved==true){
+        return res.status(404).json({ message: 'Event cannot be edited ' });
+      }
       event.title = updatedEventData.title || event.title; 
       event.description = updatedEventData.description || event.description;
-      event.price = updatedEventData.price || event.price;
-      event.date = updatedEventData.date || event.date;
+      event.startDate = updatedEventData.startDate || event.startDate;
+      event.endDate = updatedEventData.endDate || event.endDate;
       event.time = updatedEventData.time || event.time;
       event.location = updatedEventData.location || event.location; 
       event.category=updatedEventData.category||event.category;
