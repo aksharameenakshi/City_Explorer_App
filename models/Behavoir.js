@@ -29,7 +29,8 @@ const userSchema = new mongoose.Schema({
 export const eventSchema = new mongoose.Schema({
   title: { type: String, trim: true , required: [true, 'Title is required']},
   description: { type: String, trim: true , required: [true, 'Description is required']},
-  date: { type: Date, required: [true, 'Date is required'] }, 
+  startDate: { type: String, required: [true, 'Start Date is required'] }, 
+  endDate: { type: String, required: [true, 'End Date is required'] }, 
   time: { type: String , required: [true, 'Time is required']},
   location: { type: String, required: [true, 'Location is required'] },
   category: { type: String , required: [true, 'Category is required']},
