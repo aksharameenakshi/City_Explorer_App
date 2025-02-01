@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import path from "path"
 import { loginRoute } from "./controllers/login.js";
 import { signupRoute } from "./controllers/signup.js";
-import { eventRouteAdd, eventRouteDelete, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
+import { eventRouteAdd, eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp } from "./controllers/wishlist.js";
 import cors from "cors"
 import { authentication } from "./middleware/authware.js";
 import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInGroup} from "./controllers/community.js";
@@ -34,7 +34,6 @@ app.get('/events/search', eventRouteSearch);
 app.post('/events/filter', eventRouteFilter);
 app.get('/my-events', [authentication], eventRouteMyevents);
 app.post('/my-events', [authentication], eventRouteAdd);
-app.delete('/my-events', [authentication], eventRouteDelete);
 app.get('/allGroup',allGroup);
 app.post("/profile_settings", [authentication], profileSettings);
 app.get("/getprofilesettings",[authentication], getProfileSettings); 
