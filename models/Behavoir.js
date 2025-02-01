@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
 });
 
 export const eventSchema = new mongoose.Schema({
-  title: { type: String, trim: true , required: [true, 'Title is required']},
+  eventName: { type: String, trim: true , required: [true, 'Event name is required']},
   description: { type: String, trim: true , required: [true, 'Description is required']},
   date: { type: Date, required: [true, 'Date is required'] }, 
   time: { type: String , required: [true, 'Time is required']},
@@ -42,7 +42,7 @@ export const eventSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, default: 'admin' }, // Add roles if applicable
+    role: { type: String, default: 'admin' }, 
   });
 
 
