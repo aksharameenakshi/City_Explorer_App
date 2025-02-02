@@ -90,7 +90,7 @@ export const eventRouteMyevents = async (req, res) => {
     const user = await User.findOne({ username }).populate({
       path: 'wishlist',
       match: { isApproved: true }, 
-      select: 'title description' 
+      select: 'eventName description time date location' 
     });
   
     if (!user) {
@@ -104,35 +104,51 @@ export const eventRouteMyevents = async (req, res) => {
   }
 };
 
-// Add or remove event to wishlist
 export const eventRouteAdd = async (req, res) => {
   try {
     const username = req.user.username;
-    const { add, remove } = req.body; 
+    const { events } = req.body; // Expecting an array of objects [{ eventId, isFavorite }]
 
-    if ((!Array.isArray(add) || add.length === 0) && (!Array.isArray(remove) || remove.length === 0)) {
-      return res.status(400).json({ message: "Invalid request. Provide at least one valid event ID to add or remove." });
+    if (!Array.isArray(events) || events.length === 0) {
+      return res.status(400).json({ message: "Invalid request. Provide at least one event with isFavorite status." });
     }
 
-  
+    
+    for (const event of events) {
+      if (!event.eventId || typeof event.isFavorite !== "boolean") {
+        return res.status(400).json({ message: "Each event must have a valid 'eventId' and 'isFavorite' value (true or false)." });
+      }
+    }
+
+    // Fetch user
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-  
-    let addApprovedEvents = [];
-    if (Array.isArray(add) && add.length > 0) {
-      const approvedEvents = await Event.find({ _id: { $in: add }, isApproved: true });
-      addApprovedEvents = approvedEvents.map(event => event._id.toString());
+    const addIds = events.filter(e => e.isFavorite).map(e => e.eventId);
+    const removeIds = events.filter(e => !e.isFavorite).map(e => e.eventId);
+
+
+    const approvedEvents = await Event.find({
+      _id: { $in: [...addIds, ...removeIds] },
+      isApproved: true
+    });
+    const approvedEventIds = approvedEvents.map(event => event._id.toString());
+
+    if (approvedEventIds.length === 0) {
+      return res.status(404).json({ message: "No approved events found." });
     }
 
-    if (Array.isArray(remove) && remove.length > 0) {
-      user.wishlist = user.wishlist.filter(eventId => !remove.includes(eventId.toString()));
+    if (addIds.length > 0) {
+      const validAddIds = approvedEventIds.filter(id => addIds.includes(id));
+      user.wishlist = [...new Set([...user.wishlist.map(id => id.toString()), ...validAddIds])];
     }
 
-    
-    user.wishlist = [...new Set([...user.wishlist.map(id => id.toString()), ...addApprovedEvents])];
+    if (removeIds.length > 0) {
+      const validRemoveIds = approvedEventIds.filter(id => removeIds.includes(id));
+      user.wishlist = user.wishlist.filter(eventId => !validRemoveIds.includes(eventId.toString()));
+    }
 
     await user.save();
 
