@@ -10,14 +10,14 @@ import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInG
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
-import { userSettings, updateSettings } from "./controllers/appearance.js";
-import { deleteAcc } from "./controllers/deleteAcc.js";
+// import { userSettings, updateSettings } from "./controllers/appearance.js";
+// import { deleteAcc } from "./controllers/deleteAcc.js";
 import { reminderRoute, notificationRoute } from "./controllers/notification.js";
 import { feedbackRoute } from "./controllers/feedback.js";
-import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
-import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
+// import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
+// import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
-import { addEvents, allEvents, deleteEvent, editEvent, eventCategory, eventStatus,eventOrganizer} from "./controllers/event.js";
+import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers} from "./controllers/event.js";
 // import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
@@ -42,19 +42,19 @@ app.get("/getTermsAndCondition",[authentication],getTermsAndCondition);
 app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
-app.get('/preferences', [authentication], userSettings);
-app.put('/preferences',[authentication], updateSettings);
-app.delete('/delete-account', [authentication], deleteAcc);
+// app.get('/preferences', [authentication], userSettings);
+// app.put('/preferences',[authentication], updateSettings);
+// app.delete('/delete-account', [authentication], deleteAcc);
 app.post('/reminders', [authentication], reminderRoute);
 app.get('/notifications', [authentication], notificationRoute);
 app.post('/feedback', [authentication], feedbackRoute);
-app.post('/report', [authentication], reportRoute);
-app.post('/admin-reply', [authentication], adminReplyRoute);
-app.post('/addmessages', addMessges)
-app.delete('/deleteMessage',deleteMessage)
-app.put('/editMessage',editMessage)
-app.get('/getAllMessages',getAllMessages) 
-app.get('/getMessageById',getMessageById)
+// app.post('/report', [authentication], reportRoute);
+// app.post('/admin-reply', [authentication], adminReplyRoute);
+// app.post('/addmessages', addMessges)
+// app.delete('/deleteMessage',deleteMessage)
+// app.put('/editMessage',editMessage)
+// app.get('/getAllMessages',getAllMessages) 
+// app.get('/getMessageById',getMessageById)
 app.post('/group',group),
 app.post("/add_guser",addGroupUser)
 app.delete('/removeUserGroup', removeUserFromGroup);
@@ -68,9 +68,9 @@ app.post('/addEvents', [authentication], addEvents);
 app.get('/allEvents', [authentication], allEvents);
 app.delete('/events/delete',[authentication], deleteEvent);
 app.put('/events/editEvent/:id', [authentication], editEvent);
-app.get('/events/category', [authentication], eventCategory)
-app.get('/events/status', [authentication], eventStatus)
-app.get('/events/organizer', [authentication], eventOrganizer)
+app.get('/events/category/organizer', [authentication], eventCategoryForOrg)
+app.get('/events/category/user',  [authentication], eventCategoryForUsers)
+
 
 
 import dotenv from "dotenv";
