@@ -104,20 +104,13 @@ export const eventRouteMyevents = async (req, res) => {
   }
 };
 
-export const eventRouteAdd = async (req, res) => {
+export const addToWishlist = async (req, res) => {
   try {
     const username = req.user.username;
-    const { events } = req.body; // Expecting an array of objects [{ eventId, isFavorite }]
+    const { eventIds } = req.body; 
 
-    if (!Array.isArray(events) || events.length === 0) {
-      return res.status(400).json({ message: "Invalid request. Provide at least one event with isFavorite status." });
-    }
-
-    
-    for (const event of events) {
-      if (!event.eventId || typeof event.isFavorite !== "boolean") {
-        return res.status(400).json({ message: "Each event must have a valid 'eventId' and 'isFavorite' value (true or false)." });
-      }
+    if (!Array.isArray(eventIds) || eventIds.length === 0) {
+      return res.status(400).json({ message: "Provide at least one event ID." });
     }
 
     // Fetch user
@@ -126,46 +119,66 @@ export const eventRouteAdd = async (req, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const addIds = events.filter(e => e.isFavorite).map(e => e.eventId);
-    const removeIds = events.filter(e => !e.isFavorite).map(e => e.eventId);
-
-
+    
     const approvedEvents = await Event.find({
-      _id: { $in: [...addIds, ...removeIds] },
+      _id: { $in: eventIds },
       isApproved: true
     });
-    const approvedEventIds = approvedEvents.map(event => event._id.toString());
 
-    if (approvedEventIds.length === 0) {
+    if (approvedEvents.length === 0) {
       return res.status(404).json({ message: "No approved events found." });
     }
 
-    if (addIds.length > 0) {
-      const validAddIds = approvedEventIds.filter(id => addIds.includes(id));
-      user.wishlist = [...new Set([...user.wishlist.map(id => id.toString()), ...validAddIds])];
-    }
+    const validEventIds = approvedEvents.map(event => event._id.toString());
 
-    if (removeIds.length > 0) {
-      const validRemoveIds = approvedEventIds.filter(id => removeIds.includes(id));
-      user.wishlist = user.wishlist.filter(eventId => !validRemoveIds.includes(eventId.toString()));
-    }
+
+    user.wishlist = [...new Set([...user.wishlist.map(id => id.toString()), ...validEventIds])];
 
     await user.save();
 
-    // Fetch updated wishlist
-    const updatedUser = await User.findOne({ username }).populate({
-      path: "wishlist",
-      match: { isApproved: true },
-      select: "title description date location"
-    });
-
-    res.json({
-      message: "Wishlist updated successfully.",
-      wishlist: updatedUser.wishlist
-    });
+    res.json({ message: "Events added to wishlist successfully.", wishlist: user.wishlist });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating wishlist.", error: error.message });
+    res.status(500).json({ message: "Error adding to wishlist.", error: error.message });
+  }
+};
+
+export const removeFromWishlist = async (req, res) => {
+  try {
+    const username = req.user.username;
+    const { eventIds } = req.body; 
+
+    if (!Array.isArray(eventIds) || eventIds.length === 0) {
+      return res.status(400).json({ message: "Provide at least one event ID." });
+    }
+
+    // Fetch user
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const approvedEvents = await Event.find({
+      _id: { $in: eventIds },
+      isApproved: true
+    });
+
+    if (approvedEvents.length === 0) {
+      return res.status(404).json({ message: "No approved events found." });
+    }
+
+    const validEventIds = approvedEvents.map(event => event._id.toString());
+
+    // Remove valid event IDs from wishlist
+    user.wishlist = user.wishlist.filter(eventId => !validEventIds.includes(eventId.toString()));
+
+    await user.save();
+
+    res.json({ message: "Events removed from wishlist successfully.", wishlist: user.wishlist });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error removing from wishlist.", error: error.message });
   }
 };
