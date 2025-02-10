@@ -34,6 +34,7 @@ export const eventSchema = new mongoose.Schema({
   time: { type: String , required: [true, 'Time is required']},
   location: { type: String, required: [true, 'Location is required'] },
   category: { type: String , required: [true, 'Category is required']},
+  subCategory: { type: String , required: [true, 'SubCategory is required']},
   organizer: {type: String,  required: [true, 'Organizer is required'] },
   isApproved: { type: Boolean, default: false, index: true }
 

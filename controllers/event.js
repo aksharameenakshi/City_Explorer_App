@@ -4,6 +4,8 @@ import { Event } from "../models/Behavoir.js";
 const route = express.Router();
 route.use(express.json());
 
+// API FOR ORGANIZERS
+
 // Create a new event
 
 export const addEvents =   async (req, res) => {
@@ -56,13 +58,14 @@ export const addEvents =   async (req, res) => {
       if(event.isApproved==true){
         return res.status(404).json({ message: 'Event cannot be edited ' });
       }
-      event.title = updatedEventData.title || event.title; 
+      event.eventName = updatedEventData.eventName || event.eventName; 
       event.description = updatedEventData.description || event.description;
       event.startDate = updatedEventData.startDate || event.startDate;
       event.endDate = updatedEventData.endDate || event.endDate;
       event.time = updatedEventData.time || event.time;
       event.location = updatedEventData.location || event.location; 
       event.category=updatedEventData.category||event.category;
+      event.subCategory=updatedEventData.subCategory||event.subCategory;
       event.organizer=updatedEventData.organizer||event.organizer;
   
       await event.save();
@@ -73,12 +76,14 @@ export const addEvents =   async (req, res) => {
     }
   };
  
-  // Get events by category
 
-  export const eventCategory = async (req, res) => {
+export const eventCategoryForOrg = async (req, res) => {
   try {
-    const {category} = req.query; 
-    const events = await Event.find({ category: category });
+    const {category,organizer} = req.query; 
+
+    let query = { category: { $regex: category, $options: 'i' }, organizer: { $regex: organizer, $options: 'i'} };
+
+    const events = await Event.find(query);
 
     if (events.length === 0) {
       return res.status(404).json({ message: 'No events found for the specified category.' });
@@ -91,38 +96,28 @@ export const addEvents =   async (req, res) => {
   }
 };
 
- // Get events by status for users
- export const eventStatus= async (req, res) => {
-  let { role } = req.query;
-  let events
-  try {
-    if(role!= 'user'){
 
-      events = await Event.find();
-      res.json(events);
-    }
-    else{
-      events = await Event.find({ isApproved: true });
-      res.json(events);
-       
-    }
+// USER'S APIS //
+
+  // Get events by category for users
+
+export const eventCategoryForUsers = async (req, res) => {
+  try {
+    const {category,subCategory} = req.query; 
+
+    let query = { category: { $regex: category, $options: 'i' }, subCategory: { $regex: subCategory, $options: 'i' } };
+    query.isApproved = true;
     
+    const events = await Event.find(query)
+
+    if (events.length === 0) {
+      return res.status(404).json({ message: 'No events found for the specified category.' });
+    }
+
+    res.json(events);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
-
- // Get events by organizer
-
-export const eventOrganizer= async (req, res) => {
-  const { organizer } = req.query;
-  try {
-  
-     const events = await Event.find({ organizer: organizer });
-      res.json(events);
-       
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
