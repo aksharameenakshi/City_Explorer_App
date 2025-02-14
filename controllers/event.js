@@ -65,7 +65,7 @@ export const addEvents =   async (req, res) => {
       event.time = updatedEventData.time || event.time;
       event.location = updatedEventData.location || event.location; 
       event.category=updatedEventData.category||event.category;
-      event.subCategory=updatedEventData.subCategory||event.subCategory;
+      // event.subCategory=updatedEventData.subCategory||event.subCategory;
       event.organizer=updatedEventData.organizer||event.organizer;
   
       await event.save();
@@ -103,9 +103,9 @@ export const eventCategoryForOrg = async (req, res) => {
 
 export const eventCategoryForUsers = async (req, res) => {
   try {
-    const {category,subCategory} = req.query; 
+    const {category} = req.query; 
 
-    let query = { category: { $regex: category, $options: 'i' }, subCategory: { $regex: subCategory, $options: 'i' } };
+    let query = { category: { $regex: category, $options: 'i' } };
     query.isApproved = true;
     
     const events = await Event.find(query)
