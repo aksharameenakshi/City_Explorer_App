@@ -1,6 +1,7 @@
 import express from "express"
 import mongoose from "mongoose";
-import path from "path"
+import path from "path";
+import dotenv from "dotenv";
 import { loginRoute } from "./controllers/login.js";
 import { signupRoute } from "./controllers/signup.js";
 import { eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp, addToWishlist, removeFromWishlist } from "./controllers/wishlist.js";
@@ -10,12 +11,9 @@ import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInG
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
-// import { userSettings, updateSettings } from "./controllers/appearance.js";
-// import { deleteAcc } from "./controllers/deleteAcc.js";
 import { reminderRoute, notificationRoute } from "./controllers/notification.js";
 import { feedbackRoute } from "./controllers/feedback.js";
-// import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
-// import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
+import { search } from "./controllers/search.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
 import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers} from "./controllers/event.js";
 // import { initializeApp } from "./controllers/adminlogin.js";
@@ -43,19 +41,9 @@ app.get("/getTermsAndCondition",[authentication],getTermsAndCondition);
 app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
-// app.get('/preferences', [authentication], userSettings);
-// app.put('/preferences',[authentication], updateSettings);
-// app.delete('/delete-account', [authentication], deleteAcc);
 app.post('/reminders', [authentication], reminderRoute);
 app.get('/notifications', [authentication], notificationRoute);
 app.post('/feedback', [authentication], feedbackRoute);
-// app.post('/report', [authentication], reportRoute);
-// app.post('/admin-reply', [authentication], adminReplyRoute);
-// app.post('/addmessages', addMessges)
-// app.delete('/deleteMessage',deleteMessage)
-// app.put('/editMessage',editMessage)
-// app.get('/getAllMessages',getAllMessages) 
-// app.get('/getMessageById',getMessageById)
 app.post('/group',group),
 app.post("/add_guser",addGroupUser)
 app.delete('/removeUserGroup', removeUserFromGroup);
@@ -64,7 +52,7 @@ app.get('/userListInGroup',userListInGroup);
 // app.post('/admin/create, initializeApp)'
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/approve/events', [authentication], conStatus);
-// app.get('/users', [authentication], viewUsers);
+app.get('/api/cities', [authentication], search);
 app.post('/addEvents', [authentication], addEvents);
 app.get('/allEvents', [authentication], allEvents);
 app.delete('/events/delete',[authentication], deleteEvent);
@@ -74,8 +62,8 @@ app.get('/events/category/user',  [authentication], eventCategoryForUsers)
 
 
 
-import dotenv from "dotenv";
-dotenv.config()
+
+dotenv.config({ path: './.env' })
 
 mongoose.connect('mongodb://localhost/app-backend');
 
