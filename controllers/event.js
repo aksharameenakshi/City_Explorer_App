@@ -1,5 +1,5 @@
 import express from "express";
-import { Event } from "../models/Behavoir.js";
+import { Event, User } from "../models/Behavoir.js";
 
 const route = express.Router();
 route.use(express.json());
@@ -121,3 +121,107 @@ export const eventCategoryForUsers = async (req, res) => {
   }
 };
 
+// Get my events (wishlist)
+export const eventRouteMyevents = async (req, res) => {
+  try {
+    const username = req.user.username;
+  
+    const user = await User.findOne({ username }).populate({
+      path: 'wishlist',
+      match: { isApproved: true }, 
+      select: 'eventName description time date location' 
+    });
+  
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+  
+    res.json(user.wishlist);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching wishlist');
+  }
+};
+
+
+
+//Add event to wishlist
+export const addToWishlist = async (req, res) => {
+  try {
+    const username = req.user.username;
+    const { eventIds } = req.body; 
+
+    if (!Array.isArray(eventIds) || eventIds.length === 0) {
+      return res.status(400).json({ message: "Provide at least one event ID." });
+    }
+
+    // Fetch user
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    
+    const approvedEvents = await Event.find({
+      _id: { $in: eventIds },
+      isApproved: true
+    });
+
+    if (approvedEvents.length === 0) {
+      return res.status(404).json({ message: "No approved events found." });
+    }
+
+    const validEventIds = approvedEvents.map(event => event._id.toString());
+
+
+    user.wishlist = [...new Set([...user.wishlist.map(id => id.toString()), ...validEventIds])];
+
+    await user.save();
+
+    res.json({ message: "Events added to wishlist successfully.", wishlist: user.wishlist });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error adding to wishlist.", error: error.message });
+  }
+};
+
+//Remove events from wishlist
+export const removeFromWishlist = async (req, res) => {
+  try {
+    const username = req.user.username;
+    const { eventIds } = req.body; 
+
+    if (!Array.isArray(eventIds) || eventIds.length === 0) {
+      return res.status(400).json({ message: "Provide at least one event ID." });
+    }
+
+    // Fetch user
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const approvedEvents = await Event.find({
+      _id: { $in: eventIds },
+      isApproved: true
+    });
+
+    if (approvedEvents.length === 0) {
+      return res.status(404).json({ message: "No approved events found." });
+    }
+
+    const validEventIds = approvedEvents.map(event => event._id.toString());
+
+    // Remove valid event IDs from wishlist
+    user.wishlist = user.wishlist.filter(eventId => !validEventIds.includes(eventId.toString()));
+
+    await user.save();
+
+    res.json({ message: "Events removed from wishlist successfully.", wishlist: user.wishlist });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error removing from wishlist.", error: error.message });
+  }
+};

@@ -4,7 +4,6 @@ import path from "path";
 import dotenv from "dotenv";
 import { loginRoute } from "./controllers/login.js";
 import { signupRoute } from "./controllers/signup.js";
-import { eventRouteMyevents, eventRouteSearch,eventRouteFilter, eventRouteUp, addToWishlist, removeFromWishlist } from "./controllers/wishlist.js";
 import cors from "cors"
 import { authentication } from "./middleware/authware.js";
 import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInGroup} from "./controllers/community.js";
@@ -15,7 +14,7 @@ import { reminderRoute, notificationRoute } from "./controllers/notification.js"
 import { feedbackRoute } from "./controllers/feedback.js";
 import { search } from "./controllers/search.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
-import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers} from "./controllers/event.js";
+import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers, eventRouteMyevents, addToWishlist, removeFromWishlist } from "./controllers/event.js";
 // import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
@@ -27,9 +26,6 @@ app.use(express.json());
 
 app.post('/login', loginRoute);
 app.post('/signup', signupRoute);
-app.get('/upcomingevents', eventRouteUp);
-app.get('/events/search', eventRouteSearch);
-app.post('/events/filter', eventRouteFilter);
 app.get('/my-events', [authentication], eventRouteMyevents);
 app.post('/wishlist/add', [authentication], addToWishlist );
 app.post('/wishlist/remove', [authentication], removeFromWishlist);
