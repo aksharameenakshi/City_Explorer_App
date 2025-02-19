@@ -17,7 +17,7 @@ import { feedbackRoute } from "./controllers/feedback.js";
 // import { reportRoute, adminReplyRoute } from "./controllers/Helpcenter.js";
 // import { addMessges , deleteMessage ,editMessage,getAllMessages,getMessageById} from "./controllers/message.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
-import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers} from "./controllers/event.js";
+import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers,upcomingEventForUsers} from "./controllers/event.js";
 // import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
@@ -71,6 +71,7 @@ app.delete('/events/delete',[authentication], deleteEvent);
 app.put('/events/editEvent/:id', [authentication], editEvent);
 app.get('/events/category/organizer', [authentication], eventCategoryForOrg)
 app.get('/events/category/user',  [authentication], eventCategoryForUsers)
+app.get('/events/upcoming/user',  [authentication],  upcomingEventForUsers)
 
 
 

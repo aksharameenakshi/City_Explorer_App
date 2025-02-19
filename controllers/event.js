@@ -121,3 +121,20 @@ export const eventCategoryForUsers = async (req, res) => {
   }
 };
 
+
+export const upcomingEventForUsers = async (req, res) => {
+  try {
+
+    let query = { isApproved: true };
+    
+    const events = await Event.find(query);
+
+    if (events.length === 0) {
+      return res.status(404).json({ message: 'No events found .' });
+    }
+
+    res.json(events);  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
