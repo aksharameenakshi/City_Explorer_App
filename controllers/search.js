@@ -10,17 +10,22 @@ app.use(express.json());
 
 export const search = async (req, res) => {
     try {
-        const { query } = req.query;
+        const { query, latitude, longitude } = req.body;
         if (!query) {
             return res.status(400).json({ error: "Query parameter is required" });
         }
+
+        // Default location (if user location is not provided)
+        const defaultLocation = "50.0000,-85.0000";
+        const userLocation = latitude && longitude ? `${latitude},${longitude}` : defaultLocation;
+
         const googleApiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json`;
 
         const response = await axios.get(googleApiUrl, {
             params: {
                 input: query,
                 types: "geocode",  
-                location: "50.0000,-85.0000",
+                location: userLocation,
                 radius: 1000000,  
                 components: "country:CA",
                 key: process.env.GOOGLE_API_KEY
