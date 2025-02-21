@@ -40,11 +40,11 @@ app.post('/reset-password', resetPassword);
 app.post('/reminders', [authentication], reminderRoute);
 app.get('/notifications', [authentication], notificationRoute);
 app.post('/feedback', [authentication], feedbackRoute);
-app.post('/group',group),
-app.post("/add_guser",addGroupUser)
-app.delete('/removeUserGroup', removeUserFromGroup);
-app.delete('/deleteGroup', deleteGroup);
-app.get('/userListInGroup',userListInGroup);
+app.post('/group',[authentication], group),
+app.post("/add_guser",[authentication], addGroupUser)
+app.delete('/removeUserGroup',[authentication],  removeUserFromGroup);
+app.delete('/deleteGroup', [authentication], deleteGroup);
+app.get('/userListInGroup',[authentication], userListInGroup);
 // app.post('/admin/create, initializeApp)'
 app.get('/admin/events', [authentication], viewEvent);
 app.patch('/admin/approve/events', [authentication], conStatus);
