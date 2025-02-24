@@ -10,7 +10,7 @@ route.use(express.json());
 export const userListInGroup =async (req, res) => {
 
     try {
-      const groupId = req.body.groupId;
+      const groupId = req.query.groupId;
   
       // Finding a single group by ID, including the users array
       const group = await GroupModel.findById(groupId).populate("users");
@@ -23,7 +23,7 @@ export const userListInGroup =async (req, res) => {
         id: group._id,
         groupName: group.groupName,
         users: group.users.map(user => ({  //"user" as array
-          userName: user.userId,               //showing only the required details of the users 
+          userName: user.userName,               //showing only the required details of the users 
         }))
       };
   
@@ -55,14 +55,14 @@ export const allGroup = async (req, res) => {
 
     try{
 
-    const userId=req.body.users;
+    const userName=req.body.users;
     const  groupName  = req.body.groupName;
     const description=req.body.description
-    const users=[{userId:userId}]
+    const users=[{userName:userName}]
 
     const group = await GroupModel.findOne({ groupName: groupName });
 
-    const user = await User.findOne({ username: userId });
+    const user = await User.findOne({ username: userName });
     if (!user) {
       return res.status(400).json({ error: 'User not Exists ' });
     }
@@ -111,9 +111,9 @@ export const deleteGroup= async(req,res)=>{
   //to add user to a existing group [group id , user id]
   export const addGroupUser= async (req, res) => {
     try {
-      const userId=req.body.userId
+      const userName=req.body.userId
       const groupId = req.body.groupId;
-      const newUsers=[{userId:userId}]
+      const newUsers=[{userName:userName}]
   
       const group = await GroupModel.findById(groupId);
   
@@ -122,13 +122,13 @@ export const deleteGroup= async(req,res)=>{
       }
 
       //  Find the user by username
-  const user = await User.findOne({ username: userId });
+  const user = await User.findOne({ username: userName });
   if (!user) {
     return res.status(400).json({ error: 'User not Exists ' });
 
   }
 
-  const isUserInGroup = group.users.some(user => user.userId === userId);
+  const isUserInGroup = group.users.some(user => user.userName === userName); //to check whether the given userName already exist in the group
 
   if (isUserInGroup) {
     return res.status(400).json({ error: 'User is already in the group ' });
@@ -163,7 +163,7 @@ export const deleteGroup= async(req,res)=>{
 
   export const removeUserFromGroup =async(req,res)=>{
   try {
-    const userId=req.body.usersId;
+    const userName=req.body.usersId;
     const  groupName  = req.body.groupName;
     const group = await GroupModel.findOne({ groupName });
 
@@ -172,7 +172,7 @@ export const deleteGroup= async(req,res)=>{
     }
 
     // Find the user index in the users array
-    const userIndex = group.users.findIndex(user => user.userId === userId);
+    const userIndex = group.users.findIndex(user => user.userName === userName);
 
     if (userIndex === -1) {
       return res.status(404).json({ error: 'User not found in group' });

@@ -29,8 +29,8 @@ const userSchema = new mongoose.Schema({
 export const eventSchema = new mongoose.Schema({
   eventName: { type: String, trim: true , required: [true, 'Event name is required']},
   description: { type: String, trim: true , required: [true, 'Description is required']},
-  startDate: { type: String, required: [true, 'Start Date is required'] }, 
-  endDate: { type: String, required: [true, 'End Date is required'] }, 
+  startDate: { type: Date, required: [true, 'Start Date is required'] }, 
+  endDate: { type: Date, required: [true, 'End Date is required'] }, 
   time: { type: String , required: [true, 'Time is required']},
   location: { type: String, required: [true, 'Location is required'] },
   category: { type: String , required: [true, 'Category is required']},
@@ -64,7 +64,7 @@ export const ProfileSettingsModel = mongoose.model("profile_settings", ProfileSe
 const GroupSchema = new mongoose.Schema({
   groupName:String,
   description:String,
-  users:[{userId:String}]
+  users:[{userName:String}]
 
 })
 export const GroupModel = mongoose.model("groups", GroupSchema);
