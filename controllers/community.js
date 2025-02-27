@@ -35,19 +35,30 @@ export const userListInGroup =async (req, res) => {
   };
 
 
-  //get all group data
 
+// Get all groups for a specific user 
 export const allGroup = async (req, res) => {
+  try {
+    const userName = req.query.userName; // Get the username from the query parameters
 
-    GroupModel.find()
-    .then((groups) => {
-      
-      res.status(200).json(groups);
-    })
-    .catch((error) => {
-      res.status(500).json({ message: 'Error fetching groups', error });
-    });
-  };
+    if (!userName) {
+      return res.status(400).json({ error: 'UserName is required.' });
+    }
+
+    // Fetch only groups where the user is a part of the group
+    const groups = await GroupModel.find({ 'users.userName': userName });
+
+    if (groups.length === 0) {
+      return res.status(404).json({ error: 'No groups found for this user.' });
+    }
+
+    res.status(200).json(groups);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching groups', error });
+  }
+};
+
 
 
   //to create a group[group name , description,and 1 userid]
