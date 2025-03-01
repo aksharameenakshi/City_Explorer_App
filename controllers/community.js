@@ -19,15 +19,8 @@ export const userListInGroup =async (req, res) => {
         return res.status(404).json({ error: "Group not found." });
       }
   
-      const groupDetails = {        //"groupDetails" as object  
-        id: group._id,
-        groupName: group.groupName,
-        users: group.users.map(user => ({  //"user" as array
-          userName: user.userName,               //showing only the required details of the users 
-        }))
-      };
-  
-      res.status(200).json(groupDetails);
+      
+      res.status(200).json(group);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal server error." });
