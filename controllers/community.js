@@ -28,7 +28,6 @@ export const userListInGroup =async (req, res) => {
   };
 
 
-  //get all group data
 
 // Get all groups for a specific user 
 export const allGroup = async (req, res) => {

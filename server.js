@@ -29,7 +29,7 @@ app.post('/signup', signupRoute);
 app.get('/my-events', [authentication], eventRouteMyevents);
 app.post('/wishlist/add', [authentication], addToWishlist );
 app.post('/wishlist/remove', [authentication], removeFromWishlist);
-app.get('/allGroup',allGroup);
+app.get('/allGroup', [authentication],allGroup);
 app.post("/profile_settings", [authentication], profileSettings);
 app.get("/getprofilesettings",[authentication], getProfileSettings); 
 app.get("/getAboutUs",[authentication],getAboutUs); 

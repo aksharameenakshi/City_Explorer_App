@@ -1,5 +1,6 @@
 import express from "express";
 import { Event, User } from "../models/Behavoir.js";
+import moment  from "moment";
 
 const route = express.Router();
 route.use(express.json());
@@ -23,7 +24,8 @@ export const addEvents =   async (req, res) => {
     export const allEvents =  async (req, res) => {
     try {
       const events = await Event.find();
-      res.json(events);
+      const result = events.map(event => formatDateInEvents(event));
+      res.json(result);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -33,7 +35,9 @@ export const addEvents =   async (req, res) => {
     export const deleteEvent = async (req, res) => {
     const { eventId } = req.body;
     try {
-      const result = await Event.findByIdAndDelete(eventId);
+      const events = await Event.findByIdAndDelete(eventId);
+      const result = events.map(event => formatDateInEvents(event));
+      res.json(result);
       if (!result) {
         return res.status(404).json({ message: 'Event not found' });
       }
@@ -70,7 +74,8 @@ export const addEvents =   async (req, res) => {
   
       await event.save();
   
-      res.json(event); 
+      const result = event.map(event => formatDateInEvents(event));
+      res.json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -89,7 +94,8 @@ export const eventCategoryForOrg = async (req, res) => {
       return res.status(404).json({ message: 'No events found for the specified category.' });
     }
 
-    res.json(events);
+    const result = events.map(event => formatDateInEvents(event));
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
@@ -109,12 +115,13 @@ export const eventCategoryForUsers = async (req, res) => {
     query.isApproved = true;
     
     const events = await Event.find(query)
-
+    
     if (events.length === 0) {
       return res.status(404).json({ message: 'No events found for the specified category.' });
     }
-
-    res.json(events);
+    
+    const result = events.map(event => formatDateInEvents(event));
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
@@ -142,8 +149,6 @@ export const eventRouteMyevents = async (req, res) => {
     res.status(500).send('Error fetching wishlist');
   }
 };
-
-
 
 //Add event to wishlist
 export const addToWishlist = async (req, res) => {
@@ -225,3 +230,35 @@ export const removeFromWishlist = async (req, res) => {
     res.status(500).json({ message: "Error removing from wishlist.", error: error.message });
   }
 };
+
+
+
+
+
+//converting date format
+
+function formatDateInEvents(event) {
+ 
+  const formattedStartDate = convertToDateOnly(event._doc.startDate); //calling the function to convert the startdate
+  const formattedEndDate = convertToDateOnly(event._doc.endDate); //calling the function to convert the enddate
+  const result = {
+    ...event._doc, //using spread operator => to display only the dates 
+    startDate: formattedStartDate,
+    endDate: formattedEndDate,
+  };
+  
+  return result; // Return the modified object
+}
+
+function convertToDateOnly(date) {
+  if (!date) {  //to check the date is passed
+    return null;
+  }
+
+  const momentDate = moment(date);
+  if (!momentDate.isValid()) { //to check the format is valid
+    return null;
+  }
+
+  return momentDate.format('YYYY-MM-DD');
+}
