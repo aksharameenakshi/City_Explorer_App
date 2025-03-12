@@ -15,6 +15,7 @@ import { feedbackRoute } from "./controllers/feedback.js";
 import { search } from "./controllers/search.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
 import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers, eventRouteMyevents, addToWishlist, removeFromWishlist } from "./controllers/event.js";
+import { deleteAcc } from "./controllers/deleteAcc.js";
 // import { initializeApp } from "./controllers/adminlogin.js";
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(express.json());
 
 app.post('/login', loginRoute);
 app.post('/signup', signupRoute);
+app.post('/delete-account', [authentication], deleteAcc);
 app.get('/my-events', [authentication], eventRouteMyevents);
 app.post('/wishlist/add', [authentication], addToWishlist );
 app.post('/wishlist/remove', [authentication], removeFromWishlist);
