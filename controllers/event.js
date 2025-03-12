@@ -36,8 +36,7 @@ export const addEvents =   async (req, res) => {
     const { eventId } = req.body;
     try {
       const events = await Event.findByIdAndDelete(eventId);
-      const result = events.map(event => formatDateInEvents(event));
-      res.json(result);
+      const result = events
       if (!result) {
         return res.status(404).json({ message: 'Event not found' });
       }
@@ -73,8 +72,7 @@ export const addEvents =   async (req, res) => {
       event.organizer=updatedEventData.organizer||event.organizer;
   
       await event.save();
-  
-      const result = event.map(event => formatDateInEvents(event));
+      const result = event
       res.json(result);
     } catch (error) {
       res.status(400).json({ message: error.message });
