@@ -27,7 +27,7 @@ app.use(express.json());
 
 app.post('/login', loginRoute);
 app.post('/signup', signupRoute);
-app.post('/delete-account', [authentication], deleteAcc);
+app.delete('/delete-account', [authentication], deleteAcc);
 app.get('/my-events', [authentication], eventRouteMyevents);
 app.post('/wishlist/add', [authentication], addToWishlist );
 app.post('/wishlist/remove', [authentication], removeFromWishlist);
