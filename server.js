@@ -10,7 +10,7 @@ import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInG
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
-import { reminderRoute, notificationRoute } from "./controllers/notification.js";
+import { getNotifications, sendUpcomingEventNotification, eventAdded } from "./controllers/notification.js";
 import { feedbackRoute } from "./controllers/feedback.js";
 import { search } from "./controllers/search.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
@@ -39,8 +39,9 @@ app.get("/getTermsAndCondition",[authentication],getTermsAndCondition);
 app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
-app.post('/reminders', [authentication], reminderRoute);
-app.get('/notifications', [authentication], notificationRoute);
+app.post('/event/notification', [authentication], eventAdded);
+app.post('/reminders', [authentication], sendUpcomingEventNotification);
+app.get('/notifications', [authentication], getNotifications);
 app.post('/feedback', [authentication], feedbackRoute);
 app.post('/group',[authentication], group),
 app.post("/add_guser",[authentication], addGroupUser)

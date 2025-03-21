@@ -4,6 +4,9 @@ import { loginSchema, User} from "../models/Behavoir.js";
 const route = express.Router();
 import jwt from 'jsonwebtoken';
 export const secretKey = 'DND4U';
+import cors from "cors";
+
+route.use(cors());
 
 route.use(express.json());
 
