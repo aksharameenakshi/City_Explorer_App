@@ -54,7 +54,7 @@ app.get('/allEvents', [authentication], allEvents);
 app.delete('/events/delete',[authentication], deleteEvent);
 app.put('/events/editEvent/:id', [authentication], editEvent);
 app.get('/events/category/organizer', [authentication], eventCategoryForOrg)
-app.get('/events/category/user',  [authentication], eventCategoryForUsers)
+app.get('/events/category/user', eventCategoryForUsers)
 
 
 
