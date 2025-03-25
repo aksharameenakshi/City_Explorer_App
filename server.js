@@ -10,8 +10,7 @@ import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInG
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
-import { getNotifications, sendUpcomingEventNotification, eventAdded } from "./controllers/notification.js";
-import { feedbackRoute } from "./controllers/feedback.js";
+import { getNotifications, eventAdded } from "./controllers/notification.js";
 import { search } from "./controllers/search.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
 import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers, eventRouteMyevents, addToWishlist, removeFromWishlist } from "./controllers/event.js";
@@ -40,9 +39,7 @@ app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
 app.post('/event/notification', [authentication], eventAdded);
-app.post('/reminders', [authentication], sendUpcomingEventNotification);
 app.get('/notifications', [authentication], getNotifications);
-app.post('/feedback', [authentication], feedbackRoute);
 app.post('/group',[authentication], group),
 app.post("/add_guser",[authentication], addGroupUser)
 app.delete('/removeUserGroup',[authentication],  removeUserFromGroup);

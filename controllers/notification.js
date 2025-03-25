@@ -30,7 +30,7 @@ export const eventAdded = async (req, res) => {
     const notification = new Notification({
       username,
       eventId,
-      message: `You added ${event.name} to your wishlist!`,
+      message: `You added ${event.eventName} to your wishlist!`,
     });
 
     await notification.save();
@@ -59,7 +59,7 @@ export const sendUpcomingEventNotification = async () => {
         const notification = new Notification({
           username: user.username,
           eventId: event._id,
-          message: `Reminder: ${event.name} is happening soon!`,
+          message: `Reminder: ${event.eventName} is happening soon!`,
         });
 
         await notification.save();
