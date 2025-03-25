@@ -253,7 +253,7 @@ function convertToDateOnly(date) {
     return null;
   }
 
-  const momentDate = moment(date);
+  const momentDate = moment.utc(date);
   if (!momentDate.isValid()) { //to check the format is valid
     return null;
   }
