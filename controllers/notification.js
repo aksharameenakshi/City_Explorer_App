@@ -20,6 +20,12 @@ export const eventAdded = async (req, res) => {
   try {
     const { username, eventId } = req.body;
 
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(403).json({ message: "Only registered users can add events to their wishlist." });
+    }
+
     // Check if event is approved
     const event = await Event.findById(eventId);
     if (!event || !event.isApproved) {
@@ -31,6 +37,8 @@ export const eventAdded = async (req, res) => {
       username,
       eventId,
       message: `You added ${event.eventName} to your wishlist!`,
+    
+      
     });
 
     await notification.save();
@@ -45,6 +53,43 @@ export const eventAdded = async (req, res) => {
   }
 };
 
+export const eventRemoved = async (req, res) => {
+  try {
+    const { username, eventId } = req.body;
+
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(403).json({ message: "Only registered users can remove events to their wishlist." });
+    }
+
+    // Check if event exists
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(400).json({ message: "Event not found" });
+    }
+
+    const notification = new Notification({
+      username,
+      eventId,
+      message: `You removed ${event.eventName} from your wishlist.`,
+    
+
+    });
+
+    await notification.save();
+
+    // Emit real-time notification
+    io.emit("notification", { username, notification });
+
+    res.status(200).json({ message: "Event removed from wishlist & user notified." });
+  } catch (error) {
+    console.error("Error removing from wishlist:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 // Notify users when an event in their wishlist is forthcoming
 export const sendUpcomingEventNotification = async () => {
   try {
@@ -56,6 +101,10 @@ export const sendUpcomingEventNotification = async () => {
       const usersWithEvent = await User.find({ wishlist: event._id });
 
       for (const user of usersWithEvent) {
+        // Ensure the user is registered (extra safety check)
+        const registeredUser = await User.findOne({ username: user.username });
+        if (!registeredUser) continue; // Skip if user is not found
+
         const notification = new Notification({
           username: user.username,
           eventId: event._id,
@@ -74,7 +123,7 @@ export const sendUpcomingEventNotification = async () => {
 // Route to fetch notifications for a user
 export const getNotifications = async (req, res) => {
   try {
-    const { username } = req.body;
+    const { username } = req.query;
 
     const notifications = await Notification.find({ username }).populate("eventId");
 

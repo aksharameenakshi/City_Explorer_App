@@ -10,7 +10,7 @@ import { allGroup,addGroupUser,group,deleteGroup,removeUserFromGroup,userListInG
 import { profileSettings ,getProfileSettings} from "./controllers/profileSettings.js";
 import { getAboutUs, getPrivacyPolicy, getTermsAndCondition } from "./controllers/profiledescription.js"
 import { forgotPassword, resetPassword} from "./controllers/forgotpassword.js";
-import { getNotifications, eventAdded } from "./controllers/notification.js";
+import { getNotifications, eventAdded, eventRemoved } from "./controllers/notification.js";
 import { search } from "./controllers/search.js";
 import {conStatus, viewEvent } from "./controllers/adminview.js"
 import { addEvents, allEvents, deleteEvent, editEvent,  eventCategoryForOrg,eventCategoryForUsers, eventRouteMyevents, addToWishlist, removeFromWishlist } from "./controllers/event.js";
@@ -39,6 +39,7 @@ app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
 app.post('/event/notification', [authentication], eventAdded);
+app.post('/event/remove/notification', [authentication], eventRemoved);
 app.get('/notifications', [authentication], getNotifications);
 app.post('/group',[authentication], group),
 app.post("/add_guser",[authentication], addGroupUser)
