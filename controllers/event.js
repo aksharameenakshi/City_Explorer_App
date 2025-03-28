@@ -103,7 +103,7 @@ export const eventCategoryForOrg = async (req, res) => {
 
 // USER'S APIS //
 
-  // Get events by category for users
+// Get events by category for users
 
 export const eventCategoryForUsers = async (req, res) => {
   try {
@@ -253,10 +253,10 @@ function convertToDateOnly(date) {
     return null;
   }
 
-  const momentDate = moment(date);
+  const momentDate = moment.utc(date);
   if (!momentDate.isValid()) { //to check the format is valid
     return null;
   }
 
-  return momentDate.format('YYYY-MM-DD');
+  return momentDate
 }
