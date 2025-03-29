@@ -18,10 +18,10 @@ app.use(express.json());
 // Notify user when they add an approved event to their wishlist
 export const eventAdded = async (req, res) => {
   try {
-    const { username, eventId } = req.body;
+    const { userName, eventId } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ userName});
     if (!user) {
       return res.status(403).json({ message: "Only registered users can add events to their wishlist." });
     }
@@ -34,7 +34,7 @@ export const eventAdded = async (req, res) => {
 
     
     const notification = new Notification({
-      username,
+      userName,
       eventId,
       message: `You added ${event.eventName} to your wishlist!`,
     
@@ -44,7 +44,7 @@ export const eventAdded = async (req, res) => {
     await notification.save();
 
     // Emit real-time notification
-    io.emit("notification", { username, notification });
+    io.emit("notification", { userName, notification });
 
     res.status(200).json({ message: "Event added to wishlist & user notified." });
   } catch (error) {
@@ -55,10 +55,10 @@ export const eventAdded = async (req, res) => {
 
 export const eventRemoved = async (req, res) => {
   try {
-    const { username, eventId } = req.body;
+    const { userName, eventId } = req.body;
 
     // Check if user exists
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ userName });
     if (!user) {
       return res.status(403).json({ message: "Only registered users can remove events to their wishlist." });
     }
@@ -70,7 +70,7 @@ export const eventRemoved = async (req, res) => {
     }
 
     const notification = new Notification({
-      username,
+      userName,
       eventId,
       message: `You removed ${event.eventName} from your wishlist.`,
     
@@ -80,7 +80,7 @@ export const eventRemoved = async (req, res) => {
     await notification.save();
 
     // Emit real-time notification
-    io.emit("notification", { username, notification });
+    io.emit("notification", { userName, notification });
 
     res.status(200).json({ message: "Event removed from wishlist & user notified." });
   } catch (error) {
