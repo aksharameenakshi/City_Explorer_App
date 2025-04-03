@@ -39,7 +39,7 @@ app.get("/getPrivacy",[authentication],getPrivacyPolicy);
 app.post('/forgot-password', forgotPassword);
 app.post('/reset-password', resetPassword);
 app.post('/event/notification', [authentication], eventAdded);
-app.post('/event/remove/notification', [authentication], eventRemoved);
+app.delete('/event/remove/notification', [authentication], eventRemoved);
 app.get('/notifications', [authentication], getNotifications);
 app.post('/group',[authentication], group),
 app.post("/add_guser",[authentication], addGroupUser)
