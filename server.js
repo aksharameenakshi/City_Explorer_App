@@ -62,7 +62,7 @@ app.get('/events/category/user', eventCategoryForUsers)
 
 dotenv.config({ path: './.env' })
 
-mongoose.connect('[ Replace with MongoDB URL Here]');
+mongoose.connect('Replace with MongoDB URL Here');
 
 //  await initializeApp();
 
