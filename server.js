@@ -62,7 +62,7 @@ app.get('/events/category/user', eventCategoryForUsers)
 
 dotenv.config({ path: './.env' })
 
-mongoose.connect('mongodb+srv://App-backend:tcpip@app-backend.ghnd1.mongodb.net/');
+mongoose.connect('[ Input MongoDB URL Here]');
 
 //  await initializeApp();
 
